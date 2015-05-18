@@ -9,6 +9,8 @@ BUILD_DEST = './build/'
 gulp.task 'copy', ()->
     gulp.src ['./src/fetch.js']
         .pipe gulp.dest(BUILD_DEST)
+    gulp.src ['./src/main.js']
+        .pipe gulp.dest(BUILD_DEST)
 
 
 gulp.task 'compile', ()->
@@ -35,5 +37,20 @@ gulp.task 'build', ['merge'], ()->
 
     ]
 
-gulp.task 'default', ['build']
+# 生成md5
+gulp.task 'md5', ['build'], ()->
+    fs = require 'fs'
+    crypto = require 'crypto'
+
+    md5 = crypto.createHash('md5')
+        .update(fs.readFileSync('./build/wap.js'))
+        .digest('hex')
+
+    console.log md5
+
+
+gulp.task 'watch', ['build'], ()->
+    gulp.watch './src/**/*', ['build']
+
+gulp.task 'default', ['watch']
 

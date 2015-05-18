@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>TEST</title>
-    <script src="../build/wap.js"></script>
+    <script>
+    var _wa = _wa || [];
+    (function() {
+        var wa = document.createElement("script");
+        wa.src = "../build/wap.js?" + Date.now();
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(wa, s);
+    })();
+    </script>
 </head>
+
 <body>
     <h1>Hello World</h1>
 </body>
+
 </html>
