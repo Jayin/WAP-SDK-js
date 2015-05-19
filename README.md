@@ -6,6 +6,13 @@ WAP Javascript SDK
 
 ## Development
 
+### init mongose's test data
+
+```
+cd path/to/WAP-SDK-js
+coffee db_init
+```
+
 ### install
 
 ```
