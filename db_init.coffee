@@ -21,7 +21,7 @@ WebsiteSchema = mongoose.Schema({
 Website = mongoose.model('Website', WebsiteSchema)
 website = new Website({
     _id: '555b2059e365c79f8f140287'
-    domain: 'testapi.com',
+    domain: 'test.wap.com',
     app_key: require('crypto').randomBytes(16).toString('hex')
     create_time: 1432040689711
 })
@@ -30,6 +30,9 @@ website.save (err, result)->
     if err
         return console.log err.message
     console.log result
+
+    # exit
+    process.exit(1)
 
 
 
