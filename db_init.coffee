@@ -1,3 +1,4 @@
+#!/usr/bin/env coffee
 mongoose = require 'mongoose'
 Schema = mongoose.Schema
 
