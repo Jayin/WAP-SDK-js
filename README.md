@@ -36,7 +36,7 @@ npm install
 gulp
 ```
 
-### genverate the md5 for `wap.js`
+### generate the md5 for `wap.js`
 
 ```
 gulp md5
