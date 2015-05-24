@@ -20,15 +20,15 @@
 <body>
     <h1>WAP Javascript SDK Test Page</h1>
     <h2># 请查看console</h2>
-    <button id="btn-click" onclick="_wa.push({category:'点击按钮行为',action: 'buy'})">点击行为测试</button>
-    <a href="#" onclick="_wa.push({category:'点击链接行为',action: 'buy', opt_label: 'CookBook1', opt_value: 79})">链接点击测试2</a>
+    <button id="btn-click" onclick="_wa.push({type: 'event', category:'点击按钮行为',action: 'buy'})">点击行为测试</button>
+    <a href="#" onclick="_wa.push({type: 'event', category:'点击链接行为',action: 'buy', opt_label: 'CookBook1', opt_value: 79})">链接点击测试2</a>
     <button id="btn-code">用户代码测试</button>
 
 
 <script type="text/javascript">
     document.getElementById('btn-code').addEventListener('click', function(){
         // balala ....
-        _wa.push({category:'用户代码统计',action: 'buy', opt_label: 'CookBook2', opt_value: 998})
+        _wa.push({type: 'event', category:'用户代码统计',action: 'buy', opt_label: 'CookBook2', opt_value: 998})
     })
 </script>
 </body>

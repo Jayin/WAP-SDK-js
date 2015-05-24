@@ -33,6 +33,8 @@ Object.observe(_wa, function(changes) {
     var c = changes[0]
     if (c.type == 'add') {
         var obj = _wa[_wa.length - 1]
-        addEvent(website_id, obj.category, obj.action, obj.opt_label, obj.opt_value)
+        if(obj.type === 'event'){
+            addEvent(website_id, obj.category, obj.action, obj.opt_label, obj.opt_value)
+        }
     }
 })
