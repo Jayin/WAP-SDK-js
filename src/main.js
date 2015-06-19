@@ -23,7 +23,7 @@ var addEvent = function(website_id, category, action, opt_label, opt_value) {
             return response.json()
         })
         .then(function(json) {
-            if (json.msg){
+            if (json.msg) {
                 console.error(json.msg)
             }
         })
@@ -33,8 +33,10 @@ Object.observe(_wa, function(changes) {
     var c = changes[0]
     if (c.type == 'add') {
         var obj = _wa[_wa.length - 1]
-        if(obj.type === 'event'){
+        if (obj.type === 'event') {
             addEvent(website_id, obj.category, obj.action, obj.opt_label, obj.opt_value)
         }
     }
 })
+
+

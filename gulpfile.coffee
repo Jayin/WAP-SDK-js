@@ -7,20 +7,14 @@ del = require 'del'
 BUILD_DEST = './build/'
 
 gulp.task 'copy', ()->
-    gulp.src ['./src/fetch.js']
-        .pipe gulp.dest(BUILD_DEST)
+    gulp.src ['./src/lib/**/*.js']
+        .pipe gulp.dest(BUILD_DEST + '/lib')
     gulp.src ['./src/main.js']
         .pipe gulp.dest(BUILD_DEST)
 
 
-gulp.task 'compile', ()->
-    gulp.src ['./src/**/*.coffee']
-        .pipe coffee()
-        .pipe gulp.dest(BUILD_DEST)
-
-
-gulp.task 'merge', ['copy', 'compile'], ()->
-    gulp.src ['./build/fetch.js', './build/main.js']
+gulp.task 'merge', ['copy'], ()->
+    gulp.src ['./build/lib/**/*.js', './build/main.js']
         .pipe concat('wap.js')
         .pipe minify
                 minify: true,
@@ -32,7 +26,7 @@ gulp.task 'merge', ['copy', 'compile'], ()->
 gulp.task 'build', ['merge'], ()->
     # clean
     del [
-        BUILD_DEST + 'fetch.js',
+        BUILD_DEST + 'lib/',
         BUILD_DEST + 'main.js'
 
     ]
