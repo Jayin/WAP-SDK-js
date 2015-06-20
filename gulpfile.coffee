@@ -20,7 +20,16 @@ gulp.task 'merge', ['copy'], ()->
     else
         MINIFY = true
 
-    gulp.src ['./build/lib/*.js', './build/main.js']
+    gulp.src ['./build/lib/cookie.js','./build/lib/fetch.js', './build/lib/uuid.js']
+        .pipe concat('main.js')
+        .pipe minify
+                minify: MINIFY,
+                collapseWhitespace: MINIFY,
+                conservativeCollapse: MINIFY,
+                minifyJS: MINIFY,
+        .pipe gulp.dest(BUILD_DEST + 'lib/')
+
+    gulp.src ['./build/lib/main.js', './build/main.js']
         .pipe concat('wap.js')
         .pipe minify
                 minify: MINIFY,
