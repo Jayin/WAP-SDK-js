@@ -5,6 +5,7 @@ minify = require 'gulp-minifier'
 del = require 'del'
 
 BUILD_DEST = './build/'
+DEV = process.env.DEV == 'true' ? true : false
 
 gulp.task 'copy', ()->
     gulp.src ['./src/lib/**/*.js']
@@ -14,13 +15,18 @@ gulp.task 'copy', ()->
 
 
 gulp.task 'merge', ['copy'], ()->
-    gulp.src ['./build/lib/**/*.js', './build/main.js']
+    if process.env.DEV
+        MINIFY = false
+    else
+        MINIFY = true
+
+    gulp.src ['./build/lib/*.js', './build/main.js']
         .pipe concat('wap.js')
         .pipe minify
-                minify: true,
-                collapseWhitespace: true,
-                conservativeCollapse: true,
-                minifyJS: true,
+                minify: MINIFY,
+                collapseWhitespace: MINIFY,
+                conservativeCollapse: MINIFY,
+                minifyJS: MINIFY,
         .pipe gulp.dest(BUILD_DEST)
 
 gulp.task 'build', ['merge'], ()->
@@ -28,7 +34,6 @@ gulp.task 'build', ['merge'], ()->
     del [
         BUILD_DEST + 'lib/',
         BUILD_DEST + 'main.js'
-
     ]
 
 # 生成md5
