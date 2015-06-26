@@ -1,4 +1,5 @@
 ;(function() {
+    'use strict';
     var BASE_URL = 'http://api.wap.com:3000/api/v1'
 
     var wa_tag = document.getElementsByTagName('script')[0]
