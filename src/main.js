@@ -7,7 +7,7 @@
     var COOKIE_KEY_WA_USER_ID  = 'wa_user_id'
 
     var __WA_DEBUG_ = function(msg){
-        debug = false
+        var debug = false
         if(debug)
             console.log(msg)
     }
@@ -62,14 +62,16 @@
     UV(uuid)
     PV()
 
-    Object.observe(_wa, function(changes) {
-        var c = changes[0]
-        if (c.type == 'add') {
-            var obj = _wa[_wa.length - 1]
-            if (obj.type === 'event') {
+    var observer = new ArrayObserver(_wa);
+    observer.open(function(splices) {
+        console.log(splices)
+        // respond to changes to the elements of arr.
+        splices.forEach(function(splice) {
+            if (splice.addedCount >0){
+                var obj = _wa[splice.index]
                 addEvent(website_id, obj.category, obj.action, obj.opt_label, obj.opt_value)
             }
-        }
-    })
+        });
+    });
 
 })()

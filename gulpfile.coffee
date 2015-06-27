@@ -14,13 +14,18 @@ gulp.task 'copy', ()->
         .pipe gulp.dest(BUILD_DEST)
 
 
-gulp.task 'merge', ['copy'], ()->
+gulp.task 'merge-lib', ['copy'], ()->
     if process.env.DEV
         MINIFY = false
     else
         MINIFY = true
 
-    gulp.src ['./build/lib/cookie.js','./build/lib/fetch.js', './build/lib/uuid.js']
+    gulp.src [  
+                './build/lib/cookie.js',
+                './build/lib/fetch.js', 
+                './build/lib/uuid.js',
+                './build/lib/observe.js'
+             ]
         .pipe concat('main.js')
         .pipe minify
                 minify: MINIFY,
@@ -28,6 +33,13 @@ gulp.task 'merge', ['copy'], ()->
                 conservativeCollapse: MINIFY,
                 minifyJS: MINIFY,
         .pipe gulp.dest(BUILD_DEST + 'lib/')
+
+
+gulp.task 'merge-core', ['merge-lib'], ()->
+    if process.env.DEV
+        MINIFY = false
+    else
+        MINIFY = true
 
     gulp.src ['./build/lib/main.js', './build/main.js']
         .pipe concat('wap.js')
@@ -38,12 +50,9 @@ gulp.task 'merge', ['copy'], ()->
                 minifyJS: MINIFY,
         .pipe gulp.dest(BUILD_DEST)
 
-gulp.task 'build', ['merge'], ()->
-    # clean
-    del [
-        BUILD_DEST + 'lib/',
-        BUILD_DEST + 'main.js'
-    ]
+
+gulp.task 'build', ['merge-core']
+
 
 # 生成md5
 gulp.task 'md5', ['build'], ()->
