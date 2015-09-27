@@ -38,29 +38,6 @@
                 }
             })
     }
-    /**
-     * UniqueView
-     */
-    var UV = function (uuid){
-        if(!getCookie(COOKIE_KEY_WA_USER_ID)){
-            var newId = (Date.now() + '-' + uuid.v4())
-            var expires = new Date()
-            expires.setDate(expires.getDate() + 1) // 一天
-            setCookie(COOKIE_KEY_WA_USER_ID, newId, expires)      
-
-            addEvent(website_id, newId, 'UniqueView', window.location.href, '')    
-        }
-    }
-    /**
-     * PageView
-     */
-    var PV = function (){
-        addEvent(website_id, getCookie(COOKIE_KEY_WA_USER_ID), 'PageView', window.location.href, '')
-    }
-
-    //先UV后PV
-    UV(uuid)
-    PV()
 
     var observer = new ArrayObserver(_wa);
     observer.open(function(splices) {
@@ -73,5 +50,9 @@
             }
         });
     });
-
+    //basicly record
+    (function(website_id){
+        var e = document.createElement('img');
+        e.src = BASE_URL + '/wap.png?wid=' + website_id;
+    })(website_id)
 })()

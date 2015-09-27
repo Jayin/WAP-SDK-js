@@ -1,1 +1,2404 @@
-var getCookie=function(e){for(var t=function(e){var t=document.cookie.indexOf(";",e);return-1==t&&(t=document.cookie.length),unescape(document.cookie.substring(e,t))},r=e+"=",n=r.length,i=document.cookie.length,o=0;i>o;){var s=o+n;if(document.cookie.substring(o,s)==r)return t(s);if(o=document.cookie.indexOf(" ",o)+1,0==o)break}return null},setCookie=function(e,t,r,n,i,o){document.cookie=e+"="+escape(t)+(null==r?"":"; expires="+r.toGMTString())+(null==n?"":"; path="+n)+(null==i?"":"; domain="+i)+(1==o?"; secure":"")};!function(){"use strict";function e(e){if("string"!=typeof e&&(e=e.toString()),/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(e))throw new TypeError("Invalid character in header field name");return e.toLowerCase()}function t(e){return"string"!=typeof e&&(e=e.toString()),e}function r(e){this.map={};var t=this;e instanceof r?e.forEach(function(e,r){r.forEach(function(r){t.append(e,r)})}):e&&Object.getOwnPropertyNames(e).forEach(function(r){t.append(r,e[r])})}function n(e){return e.bodyUsed?Promise.reject(new TypeError("Already read")):void(e.bodyUsed=!0)}function i(e){return new Promise(function(t,r){e.onload=function(){t(e.result)},e.onerror=function(){r(e.error)}})}function o(e){var t=new FileReader;return t.readAsArrayBuffer(e),i(t)}function s(e){var t=new FileReader;return t.readAsText(e),i(t)}function a(){return this.bodyUsed=!1,this._initBody=function(e){if(this._bodyInit=e,"string"==typeof e)this._bodyText=e;else if(f.blob&&Blob.prototype.isPrototypeOf(e))this._bodyBlob=e;else if(f.formData&&FormData.prototype.isPrototypeOf(e))this._bodyFormData=e;else{if(e)throw new Error("unsupported BodyInit type");this._bodyText=""}},f.blob?(this.blob=function(){var e=n(this);if(e)return e;if(this._bodyBlob)return Promise.resolve(this._bodyBlob);if(this._bodyFormData)throw new Error("could not read FormData body as blob");return Promise.resolve(new Blob([this._bodyText]))},this.arrayBuffer=function(){return this.blob().then(o)},this.text=function(){var e=n(this);if(e)return e;if(this._bodyBlob)return s(this._bodyBlob);if(this._bodyFormData)throw new Error("could not read FormData body as text");return Promise.resolve(this._bodyText)}):this.text=function(){var e=n(this);return e?e:Promise.resolve(this._bodyText)},f.formData&&(this.formData=function(){return this.text().then(h)}),this.json=function(){return this.text().then(JSON.parse)},this}function u(e){var t=e.toUpperCase();return v.indexOf(t)>-1?t:e}function c(e,t){if(t=t||{},this.url=e,this.credentials=t.credentials||"omit",this.headers=new r(t.headers),this.method=u(t.method||"GET"),this.mode=t.mode||null,this.referrer=null,("GET"===this.method||"HEAD"===this.method)&&t.body)throw new TypeError("Body not allowed for GET or HEAD requests");this._initBody(t.body)}function h(e){var t=new FormData;return e.trim().split("&").forEach(function(e){if(e){var r=e.split("="),n=r.shift().replace(/\+/g," "),i=r.join("=").replace(/\+/g," ");t.append(decodeURIComponent(n),decodeURIComponent(i))}}),t}function d(e){var t=new r,n=e.getAllResponseHeaders().trim().split("\n");return n.forEach(function(e){var r=e.trim().split(":"),n=r.shift().trim(),i=r.join(":").trim();t.append(n,i)}),t}function l(e,t){t||(t={}),this._initBody(e),this.type="default",this.url=null,this.status=t.status,this.ok=this.status>=200&&this.status<300,this.statusText=t.statusText,this.headers=t.headers instanceof r?t.headers:new r(t.headers),this.url=t.url||""}if(!self.fetch){r.prototype.append=function(r,n){r=e(r),n=t(n);var i=this.map[r];i||(i=[],this.map[r]=i),i.push(n)},r.prototype["delete"]=function(t){delete this.map[e(t)]},r.prototype.get=function(t){var r=this.map[e(t)];return r?r[0]:null},r.prototype.getAll=function(t){return this.map[e(t)]||[]},r.prototype.has=function(t){return this.map.hasOwnProperty(e(t))},r.prototype.set=function(r,n){this.map[e(r)]=[t(n)]},r.prototype.forEach=function(e){var t=this;Object.getOwnPropertyNames(this.map).forEach(function(r){e(r,t.map[r])})};var f={blob:"FileReader"in self&&"Blob"in self&&function(){try{return new Blob,!0}catch(e){return!1}}(),formData:"FormData"in self},v=["DELETE","GET","HEAD","OPTIONS","POST","PUT"];a.call(c.prototype),a.call(l.prototype),self.Headers=r,self.Request=c,self.Response=l,self.fetch=function(e,t){var r;return r=c.prototype.isPrototypeOf(e)&&!t?e:new c(e,t),new Promise(function(e,t){function n(){return"responseURL"in i?i.responseURL:/^X-Request-URL:/m.test(i.getAllResponseHeaders())?i.getResponseHeader("X-Request-URL"):void 0}var i=new XMLHttpRequest;i.onload=function(){var r=1223===i.status?204:i.status;if(100>r||r>599)return void t(new TypeError("Network request failed"));var o={status:r,statusText:i.statusText,headers:d(i),url:n()},s="response"in i?i.response:i.responseText;e(new l(s,o))},i.onerror=function(){t(new TypeError("Network request failed"))},i.open(r.method,r.url,!0),"include"===r.credentials&&(i.withCredentials=!0),"responseType"in i&&f.blob&&(i.responseType="blob"),r.headers.forEach(function(e,t){t.forEach(function(t){i.setRequestHeader(e,t)})}),i.send("undefined"==typeof r._bodyInit?null:r._bodyInit)})},self.fetch.polyfill=!0}}(),function(){function e(e,t,r){var n=t&&r||0,i=0;for(t=t||[],e.toLowerCase().replace(/[0-9a-f]{2}/g,function(e){16>i&&(t[n+i++]=f[e])});16>i;)t[n+i++]=0;return t}function t(e,t){var r=t||0,n=l;return n[e[r++]]+n[e[r++]]+n[e[r++]]+n[e[r++]]+"-"+n[e[r++]]+n[e[r++]]+"-"+n[e[r++]]+n[e[r++]]+"-"+n[e[r++]]+n[e[r++]]+"-"+n[e[r++]]+n[e[r++]]+n[e[r++]]+n[e[r++]]+n[e[r++]]+n[e[r++]]}function r(e,r,n){var i=r&&n||0,o=r||[];e=e||{};var s=null!=e.clockseq?e.clockseq:_,a=null!=e.msecs?e.msecs:(new Date).getTime(),u=null!=e.nsecs?e.nsecs:g+1,c=a-y+(u-g)/1e4;if(0>c&&null==e.clockseq&&(s=s+1&16383),(0>c||a>y)&&null==e.nsecs&&(u=0),u>=1e4)throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");y=a,g=u,_=s,a+=122192928e5;var h=(1e4*(268435455&a)+u)%4294967296;o[i++]=h>>>24&255,o[i++]=h>>>16&255,o[i++]=h>>>8&255,o[i++]=255&h;var d=a/4294967296*1e4&268435455;o[i++]=d>>>8&255,o[i++]=255&d,o[i++]=d>>>24&15|16,o[i++]=d>>>16&255,o[i++]=s>>>8|128,o[i++]=255&s;for(var l=e.node||b,f=0;6>f;f++)o[i+f]=l[f];return r?r:t(o)}function n(e,r,n){var o=r&&n||0;"string"==typeof e&&(r="binary"==e?new d(16):null,e=null),e=e||{};var s=e.random||(e.rng||i)();if(s[6]=15&s[6]|64,s[8]=63&s[8]|128,r)for(var a=0;16>a;a++)r[o+a]=s[a];return r||t(s)}var i,o=this,s=o.crypto||o.msCrypto;if("function"==typeof o.require)try{var a=o.require("crypto").randomBytes;i=a&&function(){return a(16)}}catch(u){}if(!i&&s&&s.getRandomValues){var c=new Uint8Array(16);i=function(){return s.getRandomValues(c),c}}if(!i){var h=new Array(16);i=function(){for(var e,t=0;16>t;t++)0===(3&t)&&(e=4294967296*Math.random()),h[t]=e>>>((3&t)<<3)&255;return h}}for(var d="function"==typeof o.Buffer?o.Buffer:Array,l=[],f={},v=0;256>v;v++)l[v]=(v+256).toString(16).substr(1),f[l[v]]=v;var p=i(),b=[1|p[0],p[1],p[2],p[3],p[4],p[5]],_=16383&(p[6]<<8|p[7]),y=0,g=0,m=n;if(m.v1=r,m.v4=n,m.parse=e,m.unparse=t,m.BufferClass=d,"undefined"!=typeof module&&module.exports)module.exports=m;else if("function"==typeof define&&define.amd)define(function(){return m});else{var O=o.uuid;m.noConflict=function(){return o.uuid=O,m},o.uuid=m}}.call(this),function(e){"use strict";function t(){function e(e){t=e}if("function"!=typeof Object.observe||"function"!=typeof Array.observe)return!1;var t=[],r={},n=[];return Object.observe(r,e),Array.observe(n,e),r.id=1,r.id=2,delete r.id,n.push(1,2),n.length=0,Object.deliverChangeRecords(e),5!==t.length?!1:"add"!=t[0].type||"update"!=t[1].type||"delete"!=t[2].type||"splice"!=t[3].type||"splice"!=t[4].type?!1:(Object.unobserve(r,e),Array.unobserve(n,e),!0)}function r(){if("undefined"!=typeof chrome&&chrome.app&&chrome.app.runtime)return!1;if("undefined"!=typeof navigator&&navigator.getDeviceStorage)return!1;try{var e=new Function("","return true;");return e()}catch(t){return!1}}function n(e){return+e===e>>>0&&""!==e}function i(e){return+e}function o(e){return e===Object(e)}function s(e,t){return e===t?0!==e||1/e===1/t:Q(e)&&Q(t)?!0:e!==e&&t!==t}function a(e){if(void 0===e)return"eof";var t=e.charCodeAt(0);switch(t){case 91:case 93:case 46:case 34:case 39:case 48:return e;case 95:case 36:return"ident";case 32:case 9:case 10:case 13:case 160:case 65279:case 8232:case 8233:return"ws"}return t>=97&&122>=t||t>=65&&90>=t?"ident":t>=49&&57>=t?"number":"else"}function u(){}function c(e){function t(){if(!(l>=e.length)){var t=e[l+1];return"inSingleQuote"==f&&"'"==t||"inDoubleQuote"==f&&'"'==t?(l++,n=t,v.append(),!0):void 0}}for(var r,n,i,o,s,c,h,d=[],l=-1,f="beforePath",v={push:function(){void 0!==i&&(d.push(i),i=void 0)},append:function(){void 0===i?i=n:i+=n}};f;)if(l++,r=e[l],"\\"!=r||!t(f)){if(o=a(r),h=z[f],s=h[o]||h["else"]||"error","error"==s)return;if(f=s[0],c=v[s[1]]||u,n=void 0===s[2]?r:s[2],c(),"afterPath"===f)return d}}function h(e){return $.test(e)}function d(e,t){if(t!==J)throw Error("Use Path.get to retrieve path objects");for(var r=0;r<e.length;r++)this.push(String(e[r]));L&&this.length&&(this.getValueFrom=this.compiledGetValueFromFn())}function l(e){if(e instanceof d)return e;if((null==e||0==e.length)&&(e=""),"string"!=typeof e){if(n(e.length))return new d(e,J);e=String(e)}var t=X[e];if(t)return t;var r=c(e);if(!r)return K;var t=new d(r,J);return X[e]=t,t}function f(e){return n(e)?"["+e+"]":'["'+e.replace(/"/g,'\\"')+'"]'}function v(t){for(var r=0;Y>r&&t.check_();)r++;return N&&(e.dirtyCheckCycleCount=r),r>0}function p(e){for(var t in e)return!1;return!0}function b(e){return p(e.added)&&p(e.removed)&&p(e.changed)}function _(e,t){var r={},n={},i={};for(var o in t){var s=e[o];(void 0===s||s!==t[o])&&(o in e?s!==t[o]&&(i[o]=s):n[o]=void 0)}for(var o in e)o in t||(r[o]=e[o]);return Array.isArray(e)&&e.length!==t.length&&(i.length=e.length),{added:r,removed:n,changed:i}}function y(){if(!ee.length)return!1;for(var e=0;e<ee.length;e++)ee[e]();return ee.length=0,!0}function g(){function e(e){t&&t.state_===oe&&!n&&t.check_(e)}var t,r,n=!1,i=!0;return{open:function(r){if(t)throw Error("ObservedObject in use");i||Object.deliverChangeRecords(e),t=r,i=!1},observe:function(t,n){r=t,n?Array.observe(r,e):Object.observe(r,e)},deliver:function(t){n=t,Object.deliverChangeRecords(e),n=!1},close:function(){t=void 0,Object.unobserve(r,e),re.push(this)}}}function m(e,t,r){var n=re.pop()||g();return n.open(e),n.observe(t,r),n}function O(){function e(t,o){t&&(t===n&&(i[o]=!0),a.indexOf(t)<0&&(a.push(t),Object.observe(t,r)),e(Object.getPrototypeOf(t),o))}function t(e){for(var t=0;t<e.length;t++){var r=e[t];if(r.object!==n||i[r.name]||"setPrototype"===r.type)return!1}return!0}function r(r){if(!t(r)){for(var n,i=0;i<s.length;i++)n=s[i],n.state_==oe&&n.iterateObjects_(e);for(var i=0;i<s.length;i++)n=s[i],n.state_==oe&&n.check_()}}var n,i,o=0,s=[],a=[],u={objects:a,get rootObject(){return n},set rootObject(e){n=e,i={}},open:function(t,r){s.push(t),o++,t.iterateObjects_(e)},close:function(e){if(o--,!(o>0)){for(var t=0;t<a.length;t++)Object.unobserve(a[t],r),j.unobservedCount++;s.length=0,a.length=0,n=void 0,i=void 0,ne.push(this),W===this&&(W=null)}}};return u}function w(e,t){return W&&W.rootObject===t||(W=ne.pop()||O(),W.rootObject=t),W.open(e,t),W}function j(){this.state_=ie,this.callback_=void 0,this.target_=void 0,this.directObserver_=void 0,this.value_=void 0,this.id_=ue++}function x(e){j._allObserversCount++,he&&ce.push(e)}function C(e){j._allObserversCount--}function E(e){j.call(this),this.value_=e,this.oldObject_=void 0}function k(e){if(!Array.isArray(e))throw Error("Provided object is not an Array");E.call(this,e)}function P(e,t){j.call(this),this.object_=e,this.path_=l(t),this.directObserver_=void 0}function A(e){j.call(this),this.reportChangesOnOpen_=e,this.value_=[],this.directObserver_=void 0,this.observed_=[]}function F(e){return e}function T(e,t,r,n){this.callback_=void 0,this.target_=void 0,this.value_=void 0,this.observable_=e,this.getValueFn_=t||F,this.setValueFn_=r||F,this.dontPassThroughSet_=n}function D(e,t,r){for(var n={},i={},o=0;o<t.length;o++){var s=t[o];fe[s.type]?(s.name in r||(r[s.name]=s.oldValue),"update"!=s.type&&("add"!=s.type?s.name in n?(delete n[s.name],delete r[s.name]):i[s.name]=!0:s.name in i?delete i[s.name]:n[s.name]=!0)):(console.error("Unknown changeRecord type: "+s.type),console.error(s))}for(var a in n)n[a]=e[a];for(var a in i)i[a]=void 0;var u={};for(var a in r)if(!(a in n||a in i)){var c=e[a];r[a]!==c&&(u[a]=c)}return{added:n,removed:i,changed:u}}function S(e,t,r){return{index:e,removed:t,addedCount:r}}function R(){}function V(e,t,r,n,i,o){return ye.calcSplices(e,t,r,n,i,o)}function I(e,t,r,n){return r>t||e>n?-1:t==r||n==e?0:r>e?n>t?t-r:n-r:t>n?n-e:t-e}function B(e,t,r,n){for(var i=S(t,r,n),o=!1,s=0,a=0;a<e.length;a++){var u=e[a];if(u.index+=s,!o){var c=I(i.index,i.index+i.removed.length,u.index,u.index+u.addedCount);if(c>=0){e.splice(a,1),a--,s-=u.addedCount-u.removed.length,i.addedCount+=u.addedCount-c;var h=i.removed.length+u.removed.length-c;if(i.addedCount||h){var r=u.removed;if(i.index<u.index){var d=i.removed.slice(0,u.index-i.index);Array.prototype.push.apply(d,r),r=d}if(i.index+i.removed.length>u.index+u.addedCount){var l=i.removed.slice(u.index+u.addedCount-i.index);Array.prototype.push.apply(r,l)}i.removed=r,u.index<i.index&&(i.index=u.index)}else o=!0}else if(i.index<u.index){o=!0,e.splice(a,0,i),a++;var f=i.addedCount-i.removed.length;u.index+=f,s+=f}}}o||e.push(i)}function q(e,t){for(var r=[],o=0;o<t.length;o++){var s=t[o];switch(s.type){case"splice":B(r,s.index,s.removed.slice(),s.addedCount);break;case"add":case"update":case"delete":if(!n(s.name))continue;var a=i(s.name);if(0>a)continue;B(r,a,[s.oldValue],1);break;default:console.error("Unexpected record type: "+JSON.stringify(s))}}return r}function U(e,t){var r=[];return q(e,t).forEach(function(t){return 1==t.addedCount&&1==t.removed.length?void(t.removed[0]!==e[t.index]&&r.push(t)):void(r=r.concat(V(e,t.index,t.index+t.addedCount,t.removed,0,t.removed.length)))}),r}var N=e.testingExposeCycleCount,H=t(),L=r(),Q=e.Number.isNaN||function(t){return"number"==typeof t&&e.isNaN(t)},G="__proto__"in{}?function(e){return e}:function(e){var t=e.__proto__;if(!t)return e;var r=Object.create(t);return Object.getOwnPropertyNames(e).forEach(function(t){Object.defineProperty(r,t,Object.getOwnPropertyDescriptor(e,t))}),r},M="[$_a-zA-Z]",Z="[$_a-zA-Z0-9]",$=new RegExp("^"+M+"+"+Z+"*$"),z={beforePath:{ws:["beforePath"],ident:["inIdent","append"],"[":["beforeElement"],eof:["afterPath"]},inPath:{ws:["inPath"],".":["beforeIdent"],"[":["beforeElement"],eof:["afterPath"]},beforeIdent:{ws:["beforeIdent"],ident:["inIdent","append"]},inIdent:{ident:["inIdent","append"],0:["inIdent","append"],number:["inIdent","append"],ws:["inPath","push"],".":["beforeIdent","push"],"[":["beforeElement","push"],eof:["afterPath","push"]},beforeElement:{ws:["beforeElement"],0:["afterZero","append"],number:["inIndex","append"],"'":["inSingleQuote","append",""],'"':["inDoubleQuote","append",""]},afterZero:{ws:["afterElement","push"],"]":["inPath","push"]},inIndex:{0:["inIndex","append"],number:["inIndex","append"],ws:["afterElement"],"]":["inPath","push"]},inSingleQuote:{"'":["afterElement"],eof:["error"],"else":["inSingleQuote","append"]},inDoubleQuote:{'"':["afterElement"],eof:["error"],"else":["inDoubleQuote","append"]},afterElement:{ws:["afterElement"],"]":["inPath","push"]}},J={},X={};d.get=l,d.prototype=G({__proto__:[],valid:!0,toString:function(){for(var e="",t=0;t<this.length;t++){var r=this[t];e+=h(r)?t?"."+r:r:f(r)}return e},getValueFrom:function(e,t){for(var r=0;r<this.length;r++){if(null==e)return;e=e[this[r]]}return e},iterateObjects:function(e,t){for(var r=0;r<this.length;r++){if(r&&(e=e[this[r-1]]),!o(e))return;t(e,this[r])}},compiledGetValueFromFn:function(){var e="",t="obj";e+="if (obj != null";for(var r,n=0;n<this.length-1;n++)r=this[n],t+=h(r)?"."+r:f(r),e+=" &&\n     "+t+" != null";e+=")\n";var r=this[n];return t+=h(r)?"."+r:f(r),e+="  return "+t+";\nelse\n  return undefined;",new Function("obj",e)},setValueFrom:function(e,t){if(!this.length)return!1;for(var r=0;r<this.length-1;r++){if(!o(e))return!1;e=e[this[r]]}return o(e)?(e[this[r]]=t,!0):!1}});var K=new d("",J);K.valid=!1,K.getValueFrom=K.setValueFrom=function(){};var W,Y=1e3,ee=[],te=H?function(){return function(e){return Promise.resolve().then(e)}}():function(){return function(e){ee.push(e)}}(),re=[],ne=[],ie=0,oe=1,se=2,ae=3,ue=1;j.prototype={open:function(e,t){if(this.state_!=ie)throw Error("Observer has already been opened.");return x(this),this.callback_=e,this.target_=t,this.connect_(),this.state_=oe,this.value_},close:function(){this.state_==oe&&(C(this),this.disconnect_(),this.value_=void 0,this.callback_=void 0,this.target_=void 0,this.state_=se)},deliver:function(){this.state_==oe&&v(this)},report_:function(e){try{this.callback_.apply(this.target_,e)}catch(t){j._errorThrownDuringCallback=!0,console.error("Exception caught during observer callback: "+(t.stack||t))}},discardChanges:function(){return this.check_(void 0,!0),this.value_}};var ce,he=!H;j._allObserversCount=0,he&&(ce=[]);var de=!1;e.Platform=e.Platform||{},e.Platform.performMicrotaskCheckpoint=function(){if(!de&&he){de=!0;var t,r,n=0;do{n++,r=ce,ce=[],t=!1;for(var i=0;i<r.length;i++){var o=r[i];o.state_==oe&&(o.check_()&&(t=!0),ce.push(o))}y()&&(t=!0)}while(Y>n&&t);N&&(e.dirtyCheckCycleCount=n),de=!1}},he&&(e.Platform.clearObservers=function(){ce=[]}),E.prototype=G({__proto__:j.prototype,arrayObserve:!1,connect_:function(e,t){H?this.directObserver_=m(this,this.value_,this.arrayObserve):this.oldObject_=this.copyObject(this.value_)},copyObject:function(e){var t=Array.isArray(e)?[]:{};for(var r in e)t[r]=e[r];return Array.isArray(e)&&(t.length=e.length),t},check_:function(e,t){var r,n;if(H){if(!e)return!1;n={},r=D(this.value_,e,n)}else n=this.oldObject_,r=_(this.value_,this.oldObject_);return b(r)?!1:(H||(this.oldObject_=this.copyObject(this.value_)),this.report_([r.added||{},r.removed||{},r.changed||{},function(e){return n[e]}]),!0)},disconnect_:function(){H?(this.directObserver_.close(),this.directObserver_=void 0):this.oldObject_=void 0},deliver:function(){this.state_==oe&&(H?this.directObserver_.deliver(!1):v(this))},discardChanges:function(){return this.directObserver_?this.directObserver_.deliver(!0):this.oldObject_=this.copyObject(this.value_),this.value_}}),k.prototype=G({__proto__:E.prototype,arrayObserve:!0,copyObject:function(e){return e.slice()},check_:function(e){var t;if(H){if(!e)return!1;t=U(this.value_,e)}else t=V(this.value_,0,this.value_.length,this.oldObject_,0,this.oldObject_.length);return t&&t.length?(H||(this.oldObject_=this.copyObject(this.value_)),this.report_([t]),!0):!1}}),k.applySplices=function(e,t,r){r.forEach(function(r){for(var n=[r.index,r.removed.length],i=r.index;i<r.index+r.addedCount;)n.push(t[i]),i++;Array.prototype.splice.apply(e,n)})},P.prototype=G({__proto__:j.prototype,get path(){return this.path_},connect_:function(){H&&(this.directObserver_=w(this,this.object_)),this.check_(void 0,!0)},disconnect_:function(){this.value_=void 0,this.directObserver_&&(this.directObserver_.close(this),this.directObserver_=void 0)},iterateObjects_:function(e){this.path_.iterateObjects(this.object_,e)},check_:function(e,t){var r=this.value_;return this.value_=this.path_.getValueFrom(this.object_),t||s(this.value_,r)?!1:(this.report_([this.value_,r,this]),!0)},setValue:function(e){this.path_&&this.path_.setValueFrom(this.object_,e)}});var le={};A.prototype=G({__proto__:j.prototype,connect_:function(){if(H){for(var e,t=!1,r=0;r<this.observed_.length;r+=2)if(e=this.observed_[r],e!==le){t=!0;break}t&&(this.directObserver_=w(this,e))}this.check_(void 0,!this.reportChangesOnOpen_)},disconnect_:function(){for(var e=0;e<this.observed_.length;e+=2)this.observed_[e]===le&&this.observed_[e+1].close();this.observed_.length=0,this.value_.length=0,this.directObserver_&&(this.directObserver_.close(this),this.directObserver_=void 0)},addPath:function(e,t){if(this.state_!=ie&&this.state_!=ae)throw Error("Cannot add paths once started.");var t=l(t);if(this.observed_.push(e,t),this.reportChangesOnOpen_){var r=this.observed_.length/2-1;this.value_[r]=t.getValueFrom(e)}},addObserver:function(e){if(this.state_!=ie&&this.state_!=ae)throw Error("Cannot add observers once started.");if(this.observed_.push(le,e),this.reportChangesOnOpen_){var t=this.observed_.length/2-1;this.value_[t]=e.open(this.deliver,this)}},startReset:function(){if(this.state_!=oe)throw Error("Can only reset while open");this.state_=ae,this.disconnect_()},finishReset:function(){if(this.state_!=ae)throw Error("Can only finishReset after startReset");return this.state_=oe,this.connect_(),this.value_},iterateObjects_:function(e){for(var t,r=0;r<this.observed_.length;r+=2)t=this.observed_[r],t!==le&&this.observed_[r+1].iterateObjects(t,e)},check_:function(e,t){for(var r,n=0;n<this.observed_.length;n+=2){var i,o=this.observed_[n],a=this.observed_[n+1];if(o===le){var u=a;i=this.state_===ie?u.open(this.deliver,this):u.discardChanges()}else i=a.getValueFrom(o);t?this.value_[n/2]=i:s(i,this.value_[n/2])||(r=r||[],r[n/2]=this.value_[n/2],this.value_[n/2]=i)}return r?(this.report_([this.value_,r,this.observed_]),!0):!1}}),T.prototype={open:function(e,t){return this.callback_=e,this.target_=t,this.value_=this.getValueFn_(this.observable_.open(this.observedCallback_,this)),this.value_},observedCallback_:function(e){if(e=this.getValueFn_(e),!s(e,this.value_)){var t=this.value_;this.value_=e,this.callback_.call(this.target_,this.value_,t)}},discardChanges:function(){return this.value_=this.getValueFn_(this.observable_.discardChanges()),this.value_},deliver:function(){return this.observable_.deliver()},setValue:function(e){return e=this.setValueFn_(e),!this.dontPassThroughSet_&&this.observable_.setValue?this.observable_.setValue(e):void 0},close:function(){this.observable_&&this.observable_.close(),this.callback_=void 0,this.target_=void 0,this.observable_=void 0,this.value_=void 0,this.getValueFn_=void 0,this.setValueFn_=void 0}};var fe={add:!0,update:!0,"delete":!0},ve=0,pe=1,be=2,_e=3;R.prototype={calcEditDistances:function(e,t,r,n,i,o){for(var s=o-i+1,a=r-t+1,u=new Array(s),c=0;s>c;c++)u[c]=new Array(a),u[c][0]=c;for(var h=0;a>h;h++)u[0][h]=h;for(var c=1;s>c;c++)for(var h=1;a>h;h++)if(this.equals(e[t+h-1],n[i+c-1]))u[c][h]=u[c-1][h-1];else{var d=u[c-1][h]+1,l=u[c][h-1]+1;u[c][h]=l>d?d:l}return u},spliceOperationsFromEditDistances:function(e){for(var t=e.length-1,r=e[0].length-1,n=e[t][r],i=[];t>0||r>0;)if(0!=t)if(0!=r){var o,s=e[t-1][r-1],a=e[t-1][r],u=e[t][r-1];o=u>a?s>a?a:s:s>u?u:s,o==s?(s==n?i.push(ve):(i.push(pe),n=s),t--,r--):o==a?(i.push(_e),t--,n=a):(i.push(be),r--,n=u)}else i.push(_e),t--;else i.push(be),r--;return i.reverse(),i},calcSplices:function(e,t,r,n,i,o){var s=0,a=0,u=Math.min(r-t,o-i);if(0==t&&0==i&&(s=this.sharedPrefix(e,n,u)),r==e.length&&o==n.length&&(a=this.sharedSuffix(e,n,u-s)),t+=s,i+=s,r-=a,o-=a,r-t==0&&o-i==0)return[];if(t==r){for(var c=S(t,[],0);o>i;)c.removed.push(n[i++]);return[c]}if(i==o)return[S(t,[],r-t)];for(var h=this.spliceOperationsFromEditDistances(this.calcEditDistances(e,t,r,n,i,o)),c=void 0,d=[],l=t,f=i,v=0;v<h.length;v++)switch(h[v]){case ve:c&&(d.push(c),c=void 0),l++,f++;break;case pe:c||(c=S(l,[],0)),c.addedCount++,l++,c.removed.push(n[f]),f++;break;case be:c||(c=S(l,[],0)),c.addedCount++,l++;break;case _e:c||(c=S(l,[],0)),c.removed.push(n[f]),f++}return c&&d.push(c),d},sharedPrefix:function(e,t,r){for(var n=0;r>n;n++)if(!this.equals(e[n],t[n]))return n;return r},sharedSuffix:function(e,t,r){for(var n=e.length,i=t.length,o=0;r>o&&this.equals(e[--n],t[--i]);)o++;return o},calculateSplices:function(e,t){return this.calcSplices(e,0,e.length,t,0,t.length)},equals:function(e,t){return e===t}};var ye=new R,ge=e;"undefined"==typeof exports||exports.nodeType||("undefined"!=typeof module&&module.exports&&(exports=module.exports),ge=exports),ge.Observer=j,ge.Observer.runEOM_=te,ge.Observer.observerSentinel_=le,ge.Observer.hasObjectObserve=H,ge.ArrayObserver=k,ge.ArrayObserver.calculateSplices=function(e,t){return ye.calculateSplices(e,t)},ge.ArraySplice=R,ge.ObjectObserver=E,ge.PathObserver=P,ge.CompoundObserver=A,ge.Path=d,ge.ObserverTransform=T}("undefined"!=typeof global&&global&&"undefined"!=typeof module&&module?global:this||window),function(){"use strict";var e="http://api.wap.com:3000/api/v1",t=document.getElementsByTagName("script")[0],r=t.getAttribute("id"),n="wa_user_id",i=function(e){var t=!1;t&&console.log(e)},o=function(t,r,n,o,s){i(t+" ->"+r+" "+n+" "+o+" "+s),fetch(e+"/website/:website_id/events".replace(":website_id",t),{method:"post",headers:{Accept:"application/json","Content-Type":"application/json"},body:JSON.stringify({category:r,action:n,opt_label:o,opt_value:s})}).then(function(e){return e.json()}).then(function(e){e.msg&&console.error(e.msg)})},s=function(e){if(!getCookie(n)){var t=Date.now()+"-"+e.v4(),i=new Date;i.setDate(i.getDate()+1),setCookie(n,t,i),o(r,t,"UniqueView",window.location.href,"")}},a=function(){o(r,getCookie(n),"PageView",window.location.href,"")};s(uuid),a();var u=new ArrayObserver(_wa);u.open(function(e){console.log(e),e.forEach(function(e){if(e.addedCount>0){var t=_wa[e.index];o(r,t.category,t.action,t.opt_label,t.opt_value)}})})}();
+/**
+ * 读取cookie中的信息
+ * @param  {string} name 
+ * @return {[string|null]}      
+ */
+var getCookie = function (name) {
+    var getCookieVal =function (offset) {
+        var endstr = document.cookie.indexOf (";", offset);
+        if (endstr == -1)
+            endstr = document.cookie.length;
+        return unescape(document.cookie.substring(offset, endstr));
+    }
+
+    var arg = name + "=";
+    var alen = arg.length;
+    var clen = document.cookie.length;
+    var i = 0;
+    while (i < clen) {
+        var j = i + alen;
+        if (document.cookie.substring(i, j) == arg)
+            return getCookieVal(j);
+        i = document.cookie.indexOf(" ", i) + 1;
+        if (i == 0) break;
+    }
+    return null;
+}
+
+/**
+ * 设置Cookie
+ * @param {string} name   名 [required]
+ * @param {string} value  值  [required]
+ * @param {Data} expires  过期时间 [required]
+ * @param {string} path    作用路径
+ * @param {string} domain  作用域
+ * @param {boolean} secure  是否支持https
+ */
+var setCookie = function (name, value, expires, path, domain, secure) {
+    document.cookie = name + "=" + escape(value) 
+                    + ((expires == null) ? "" : ("; expires=" + expires.toGMTString())) 
+                    + ((path == null) ? "" : ("; path=" + path)) 
+                    + ((domain == null) ? "" : ("; domain=" + domain)) 
+                    + ((secure == true) ? "; secure" : "");
+}
+/**
+ * window.fetch polyfill
+ * v0.8.1
+ * Copyright (c) 2014 GitHub, Inc.
+ * https://github.com/github/fetch/
+ */
+;(function() {
+  'use strict';
+
+  if (self.fetch) {
+    return
+  }
+
+  function normalizeName(name) {
+    if (typeof name !== 'string') {
+      name = name.toString();
+    }
+    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+      throw new TypeError('Invalid character in header field name')
+    }
+    return name.toLowerCase()
+  }
+
+  function normalizeValue(value) {
+    if (typeof value !== 'string') {
+      value = value.toString();
+    }
+    return value
+  }
+
+  function Headers(headers) {
+    this.map = {}
+
+    var self = this
+    if (headers instanceof Headers) {
+      headers.forEach(function(name, values) {
+        values.forEach(function(value) {
+          self.append(name, value)
+        })
+      })
+
+    } else if (headers) {
+      Object.getOwnPropertyNames(headers).forEach(function(name) {
+        self.append(name, headers[name])
+      })
+    }
+  }
+
+  Headers.prototype.append = function(name, value) {
+    name = normalizeName(name)
+    value = normalizeValue(value)
+    var list = this.map[name]
+    if (!list) {
+      list = []
+      this.map[name] = list
+    }
+    list.push(value)
+  }
+
+  Headers.prototype['delete'] = function(name) {
+    delete this.map[normalizeName(name)]
+  }
+
+  Headers.prototype.get = function(name) {
+    var values = this.map[normalizeName(name)]
+    return values ? values[0] : null
+  }
+
+  Headers.prototype.getAll = function(name) {
+    return this.map[normalizeName(name)] || []
+  }
+
+  Headers.prototype.has = function(name) {
+    return this.map.hasOwnProperty(normalizeName(name))
+  }
+
+  Headers.prototype.set = function(name, value) {
+    this.map[normalizeName(name)] = [normalizeValue(value)]
+  }
+
+  // Instead of iterable for now.
+  Headers.prototype.forEach = function(callback) {
+    var self = this
+    Object.getOwnPropertyNames(this.map).forEach(function(name) {
+      callback(name, self.map[name])
+    })
+  }
+
+  function consumed(body) {
+    if (body.bodyUsed) {
+      return Promise.reject(new TypeError('Already read'))
+    }
+    body.bodyUsed = true
+  }
+
+  function fileReaderReady(reader) {
+    return new Promise(function(resolve, reject) {
+      reader.onload = function() {
+        resolve(reader.result)
+      }
+      reader.onerror = function() {
+        reject(reader.error)
+      }
+    })
+  }
+
+  function readBlobAsArrayBuffer(blob) {
+    var reader = new FileReader()
+    reader.readAsArrayBuffer(blob)
+    return fileReaderReady(reader)
+  }
+
+  function readBlobAsText(blob) {
+    var reader = new FileReader()
+    reader.readAsText(blob)
+    return fileReaderReady(reader)
+  }
+
+  var support = {
+    blob: 'FileReader' in self && 'Blob' in self && (function() {
+      try {
+        new Blob();
+        return true
+      } catch(e) {
+        return false
+      }
+    })(),
+    formData: 'FormData' in self
+  }
+
+  function Body() {
+    this.bodyUsed = false
+
+
+    this._initBody = function(body) {
+      this._bodyInit = body
+      if (typeof body === 'string') {
+        this._bodyText = body
+      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+        this._bodyBlob = body
+      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+        this._bodyFormData = body
+      } else if (!body) {
+        this._bodyText = ''
+      } else {
+        throw new Error('unsupported BodyInit type')
+      }
+    }
+
+    if (support.blob) {
+      this.blob = function() {
+        var rejected = consumed(this)
+        if (rejected) {
+          return rejected
+        }
+
+        if (this._bodyBlob) {
+          return Promise.resolve(this._bodyBlob)
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as blob')
+        } else {
+          return Promise.resolve(new Blob([this._bodyText]))
+        }
+      }
+
+      this.arrayBuffer = function() {
+        return this.blob().then(readBlobAsArrayBuffer)
+      }
+
+      this.text = function() {
+        var rejected = consumed(this)
+        if (rejected) {
+          return rejected
+        }
+
+        if (this._bodyBlob) {
+          return readBlobAsText(this._bodyBlob)
+        } else if (this._bodyFormData) {
+          throw new Error('could not read FormData body as text')
+        } else {
+          return Promise.resolve(this._bodyText)
+        }
+      }
+    } else {
+      this.text = function() {
+        var rejected = consumed(this)
+        return rejected ? rejected : Promise.resolve(this._bodyText)
+      }
+    }
+
+    if (support.formData) {
+      this.formData = function() {
+        return this.text().then(decode)
+      }
+    }
+
+    this.json = function() {
+      return this.text().then(JSON.parse)
+    }
+
+    return this
+  }
+
+  // HTTP methods whose capitalization should be normalized
+  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+
+  function normalizeMethod(method) {
+    var upcased = method.toUpperCase()
+    return (methods.indexOf(upcased) > -1) ? upcased : method
+  }
+
+  function Request(url, options) {
+    options = options || {}
+    this.url = url
+
+    this.credentials = options.credentials || 'omit'
+    this.headers = new Headers(options.headers)
+    this.method = normalizeMethod(options.method || 'GET')
+    this.mode = options.mode || null
+    this.referrer = null
+
+    if ((this.method === 'GET' || this.method === 'HEAD') && options.body) {
+      throw new TypeError('Body not allowed for GET or HEAD requests')
+    }
+    this._initBody(options.body)
+  }
+
+  function decode(body) {
+    var form = new FormData()
+    body.trim().split('&').forEach(function(bytes) {
+      if (bytes) {
+        var split = bytes.split('=')
+        var name = split.shift().replace(/\+/g, ' ')
+        var value = split.join('=').replace(/\+/g, ' ')
+        form.append(decodeURIComponent(name), decodeURIComponent(value))
+      }
+    })
+    return form
+  }
+
+  function headers(xhr) {
+    var head = new Headers()
+    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
+    pairs.forEach(function(header) {
+      var split = header.trim().split(':')
+      var key = split.shift().trim()
+      var value = split.join(':').trim()
+      head.append(key, value)
+    })
+    return head
+  }
+
+  Body.call(Request.prototype)
+
+  function Response(bodyInit, options) {
+    if (!options) {
+      options = {}
+    }
+
+    this._initBody(bodyInit)
+    this.type = 'default'
+    this.url = null
+    this.status = options.status
+    this.ok = this.status >= 200 && this.status < 300
+    this.statusText = options.statusText
+    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+    this.url = options.url || ''
+  }
+
+  Body.call(Response.prototype)
+
+  self.Headers = Headers;
+  self.Request = Request;
+  self.Response = Response;
+
+  self.fetch = function(input, init) {
+    // TODO: Request constructor should accept input, init
+    var request
+    if (Request.prototype.isPrototypeOf(input) && !init) {
+      request = input
+    } else {
+      request = new Request(input, init)
+    }
+
+    return new Promise(function(resolve, reject) {
+      var xhr = new XMLHttpRequest()
+
+      function responseURL() {
+        if ('responseURL' in xhr) {
+          return xhr.responseURL
+        }
+
+        // Avoid security warnings on getResponseHeader when not allowed by CORS
+        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+          return xhr.getResponseHeader('X-Request-URL')
+        }
+
+        return;
+      }
+
+      xhr.onload = function() {
+        var status = (xhr.status === 1223) ? 204 : xhr.status
+        if (status < 100 || status > 599) {
+          reject(new TypeError('Network request failed'))
+          return
+        }
+        var options = {
+          status: status,
+          statusText: xhr.statusText,
+          headers: headers(xhr),
+          url: responseURL()
+        }
+        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+        resolve(new Response(body, options))
+      }
+
+      xhr.onerror = function() {
+        reject(new TypeError('Network request failed'))
+      }
+
+      xhr.open(request.method, request.url, true)
+
+      if (request.credentials === 'include') {
+        xhr.withCredentials = true
+      }
+
+      if ('responseType' in xhr && support.blob) {
+        xhr.responseType = 'blob'
+      }
+
+      request.headers.forEach(function(name, values) {
+        values.forEach(function(value) {
+          xhr.setRequestHeader(name, value)
+        })
+      })
+
+      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+    })
+  }
+  self.fetch.polyfill = true
+})();
+//     uuid.js
+//
+//     Copyright (c) 2010-2012 Robert Kieffer
+//     MIT License - http://opensource.org/licenses/mit-license.php
+
+(function() {
+  var _global = this;
+
+  // Unique ID creation requires a high quality random # generator.  We feature
+  // detect to determine the best RNG source, normalizing to a function that
+  // returns 128-bits of randomness, since that's what's usually required
+  var _rng;
+
+  // Allow for MSIE11 msCrypto
+  var _crypto = _global.crypto || _global.msCrypto;
+
+  // Node.js crypto-based RNG - http://nodejs.org/docs/v0.6.2/api/crypto.html
+  //
+  // Moderately fast, high quality
+  if (typeof(_global.require) == 'function') {
+    try {
+      var _rb = _global.require('crypto').randomBytes;
+      _rng = _rb && function() {return _rb(16);};
+    } catch(e) {}
+  }
+
+  if (!_rng && _crypto && _crypto.getRandomValues) {
+    // WHATWG crypto-based RNG - http://wiki.whatwg.org/wiki/Crypto
+    //
+    // Moderately fast, high quality
+    var _rnds8 = new Uint8Array(16);
+    _rng = function whatwgRNG() {
+      _crypto.getRandomValues(_rnds8);
+      return _rnds8;
+    };
+  }
+
+  if (!_rng) {
+    // Math.random()-based (RNG)
+    //
+    // If all else fails, use Math.random().  It's fast, but is of unspecified
+    // quality.
+    var  _rnds = new Array(16);
+    _rng = function() {
+      for (var i = 0, r; i < 16; i++) {
+        if ((i & 0x03) === 0) r = Math.random() * 0x100000000;
+        _rnds[i] = r >>> ((i & 0x03) << 3) & 0xff;
+      }
+
+      return _rnds;
+    };
+  }
+
+  // Buffer class to use
+  var BufferClass = typeof(_global.Buffer) == 'function' ? _global.Buffer : Array;
+
+  // Maps for number <-> hex string conversion
+  var _byteToHex = [];
+  var _hexToByte = {};
+  for (var i = 0; i < 256; i++) {
+    _byteToHex[i] = (i + 0x100).toString(16).substr(1);
+    _hexToByte[_byteToHex[i]] = i;
+  }
+
+  // **`parse()` - Parse a UUID into it's component bytes**
+  function parse(s, buf, offset) {
+    var i = (buf && offset) || 0, ii = 0;
+
+    buf = buf || [];
+    s.toLowerCase().replace(/[0-9a-f]{2}/g, function(oct) {
+      if (ii < 16) { // Don't overflow!
+        buf[i + ii++] = _hexToByte[oct];
+      }
+    });
+
+    // Zero out remaining bytes if string was short
+    while (ii < 16) {
+      buf[i + ii++] = 0;
+    }
+
+    return buf;
+  }
+
+  // **`unparse()` - Convert UUID byte array (ala parse()) into a string**
+  function unparse(buf, offset) {
+    var i = offset || 0, bth = _byteToHex;
+    return  bth[buf[i++]] + bth[buf[i++]] +
+            bth[buf[i++]] + bth[buf[i++]] + '-' +
+            bth[buf[i++]] + bth[buf[i++]] + '-' +
+            bth[buf[i++]] + bth[buf[i++]] + '-' +
+            bth[buf[i++]] + bth[buf[i++]] + '-' +
+            bth[buf[i++]] + bth[buf[i++]] +
+            bth[buf[i++]] + bth[buf[i++]] +
+            bth[buf[i++]] + bth[buf[i++]];
+  }
+
+  // **`v1()` - Generate time-based UUID**
+  //
+  // Inspired by https://github.com/LiosK/UUID.js
+  // and http://docs.python.org/library/uuid.html
+
+  // random #'s we need to init node and clockseq
+  var _seedBytes = _rng();
+
+  // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
+  var _nodeId = [
+    _seedBytes[0] | 0x01,
+    _seedBytes[1], _seedBytes[2], _seedBytes[3], _seedBytes[4], _seedBytes[5]
+  ];
+
+  // Per 4.2.2, randomize (14 bit) clockseq
+  var _clockseq = (_seedBytes[6] << 8 | _seedBytes[7]) & 0x3fff;
+
+  // Previous uuid creation time
+  var _lastMSecs = 0, _lastNSecs = 0;
+
+  // See https://github.com/broofa/node-uuid for API details
+  function v1(options, buf, offset) {
+    var i = buf && offset || 0;
+    var b = buf || [];
+
+    options = options || {};
+
+    var clockseq = options.clockseq != null ? options.clockseq : _clockseq;
+
+    // UUID timestamps are 100 nano-second units since the Gregorian epoch,
+    // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
+    // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
+    // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
+    var msecs = options.msecs != null ? options.msecs : new Date().getTime();
+
+    // Per 4.2.1.2, use count of uuid's generated during the current clock
+    // cycle to simulate higher resolution clock
+    var nsecs = options.nsecs != null ? options.nsecs : _lastNSecs + 1;
+
+    // Time since last uuid creation (in msecs)
+    var dt = (msecs - _lastMSecs) + (nsecs - _lastNSecs)/10000;
+
+    // Per 4.2.1.2, Bump clockseq on clock regression
+    if (dt < 0 && options.clockseq == null) {
+      clockseq = clockseq + 1 & 0x3fff;
+    }
+
+    // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
+    // time interval
+    if ((dt < 0 || msecs > _lastMSecs) && options.nsecs == null) {
+      nsecs = 0;
+    }
+
+    // Per 4.2.1.2 Throw error if too many uuids are requested
+    if (nsecs >= 10000) {
+      throw new Error('uuid.v1(): Can\'t create more than 10M uuids/sec');
+    }
+
+    _lastMSecs = msecs;
+    _lastNSecs = nsecs;
+    _clockseq = clockseq;
+
+    // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
+    msecs += 12219292800000;
+
+    // `time_low`
+    var tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
+    b[i++] = tl >>> 24 & 0xff;
+    b[i++] = tl >>> 16 & 0xff;
+    b[i++] = tl >>> 8 & 0xff;
+    b[i++] = tl & 0xff;
+
+    // `time_mid`
+    var tmh = (msecs / 0x100000000 * 10000) & 0xfffffff;
+    b[i++] = tmh >>> 8 & 0xff;
+    b[i++] = tmh & 0xff;
+
+    // `time_high_and_version`
+    b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
+    b[i++] = tmh >>> 16 & 0xff;
+
+    // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
+    b[i++] = clockseq >>> 8 | 0x80;
+
+    // `clock_seq_low`
+    b[i++] = clockseq & 0xff;
+
+    // `node`
+    var node = options.node || _nodeId;
+    for (var n = 0; n < 6; n++) {
+      b[i + n] = node[n];
+    }
+
+    return buf ? buf : unparse(b);
+  }
+
+  // **`v4()` - Generate random UUID**
+
+  // See https://github.com/broofa/node-uuid for API details
+  function v4(options, buf, offset) {
+    // Deprecated - 'format' argument, as supported in v1.2
+    var i = buf && offset || 0;
+
+    if (typeof(options) == 'string') {
+      buf = options == 'binary' ? new BufferClass(16) : null;
+      options = null;
+    }
+    options = options || {};
+
+    var rnds = options.random || (options.rng || _rng)();
+
+    // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
+    rnds[6] = (rnds[6] & 0x0f) | 0x40;
+    rnds[8] = (rnds[8] & 0x3f) | 0x80;
+
+    // Copy bytes to buffer, if provided
+    if (buf) {
+      for (var ii = 0; ii < 16; ii++) {
+        buf[i + ii] = rnds[ii];
+      }
+    }
+
+    return buf || unparse(rnds);
+  }
+
+  // Export public API
+  var uuid = v4;
+  uuid.v1 = v1;
+  uuid.v4 = v4;
+  uuid.parse = parse;
+  uuid.unparse = unparse;
+  uuid.BufferClass = BufferClass;
+
+  if (typeof(module) != 'undefined' && module.exports) {
+    // Publish as node.js module
+    module.exports = uuid;
+  } else  if (typeof define === 'function' && define.amd) {
+    // Publish as AMD module
+    define(function() {return uuid;});
+ 
+
+  } else {
+    // Publish as global (in browsers)
+    var _previousRoot = _global.uuid;
+
+    // **`noConflict()` - (browser only) to reset global 'uuid' var**
+    uuid.noConflict = function() {
+      _global.uuid = _previousRoot;
+      return uuid;
+    };
+
+    _global.uuid = uuid;
+  }
+}).call(this);
+
+/*
+ * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+ * This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+ * The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+ * The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+ * Code distributed by Google as part of the polymer project is also
+ * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+ */
+
+(function(global) {
+  'use strict';
+
+  var testingExposeCycleCount = global.testingExposeCycleCount;
+
+  // Detect and do basic sanity checking on Object/Array.observe.
+  function detectObjectObserve() {
+    if (typeof Object.observe !== 'function' ||
+        typeof Array.observe !== 'function') {
+      return false;
+    }
+
+    var records = [];
+
+    function callback(recs) {
+      records = recs;
+    }
+
+    var test = {};
+    var arr = [];
+    Object.observe(test, callback);
+    Array.observe(arr, callback);
+    test.id = 1;
+    test.id = 2;
+    delete test.id;
+    arr.push(1, 2);
+    arr.length = 0;
+
+    Object.deliverChangeRecords(callback);
+    if (records.length !== 5)
+      return false;
+
+    if (records[0].type != 'add' ||
+        records[1].type != 'update' ||
+        records[2].type != 'delete' ||
+        records[3].type != 'splice' ||
+        records[4].type != 'splice') {
+      return false;
+    }
+
+    Object.unobserve(test, callback);
+    Array.unobserve(arr, callback);
+
+    return true;
+  }
+
+  var hasObserve = detectObjectObserve();
+
+  function detectEval() {
+    // Don't test for eval if we're running in a Chrome App environment.
+    // We check for APIs set that only exist in a Chrome App context.
+    if (typeof chrome !== 'undefined' && chrome.app && chrome.app.runtime) {
+      return false;
+    }
+
+    // Firefox OS Apps do not allow eval. This feature detection is very hacky
+    // but even if some other platform adds support for this function this code
+    // will continue to work.
+    if (typeof navigator != 'undefined' && navigator.getDeviceStorage) {
+      return false;
+    }
+
+    try {
+      var f = new Function('', 'return true;');
+      return f();
+    } catch (ex) {
+      return false;
+    }
+  }
+
+  var hasEval = detectEval();
+
+  function isIndex(s) {
+    return +s === s >>> 0 && s !== '';
+  }
+
+  function toNumber(s) {
+    return +s;
+  }
+
+  function isObject(obj) {
+    return obj === Object(obj);
+  }
+
+  var numberIsNaN = global.Number.isNaN || function(value) {
+    return typeof value === 'number' && global.isNaN(value);
+  }
+
+  function areSameValue(left, right) {
+    if (left === right)
+      return left !== 0 || 1 / left === 1 / right;
+    if (numberIsNaN(left) && numberIsNaN(right))
+      return true;
+
+    return left !== left && right !== right;
+  }
+
+  var createObject = ('__proto__' in {}) ?
+    function(obj) { return obj; } :
+    function(obj) {
+      var proto = obj.__proto__;
+      if (!proto)
+        return obj;
+      var newObject = Object.create(proto);
+      Object.getOwnPropertyNames(obj).forEach(function(name) {
+        Object.defineProperty(newObject, name,
+                             Object.getOwnPropertyDescriptor(obj, name));
+      });
+      return newObject;
+    };
+
+  var identStart = '[\$_a-zA-Z]';
+  var identPart = '[\$_a-zA-Z0-9]';
+  var identRegExp = new RegExp('^' + identStart + '+' + identPart + '*' + '$');
+
+  function getPathCharType(char) {
+    if (char === undefined)
+      return 'eof';
+
+    var code = char.charCodeAt(0);
+
+    switch(code) {
+      case 0x5B: // [
+      case 0x5D: // ]
+      case 0x2E: // .
+      case 0x22: // "
+      case 0x27: // '
+      case 0x30: // 0
+        return char;
+
+      case 0x5F: // _
+      case 0x24: // $
+        return 'ident';
+
+      case 0x20: // Space
+      case 0x09: // Tab
+      case 0x0A: // Newline
+      case 0x0D: // Return
+      case 0xA0:  // No-break space
+      case 0xFEFF:  // Byte Order Mark
+      case 0x2028:  // Line Separator
+      case 0x2029:  // Paragraph Separator
+        return 'ws';
+    }
+
+    // a-z, A-Z
+    if ((0x61 <= code && code <= 0x7A) || (0x41 <= code && code <= 0x5A))
+      return 'ident';
+
+    // 1-9
+    if (0x31 <= code && code <= 0x39)
+      return 'number';
+
+    return 'else';
+  }
+
+  var pathStateMachine = {
+    'beforePath': {
+      'ws': ['beforePath'],
+      'ident': ['inIdent', 'append'],
+      '[': ['beforeElement'],
+      'eof': ['afterPath']
+    },
+
+    'inPath': {
+      'ws': ['inPath'],
+      '.': ['beforeIdent'],
+      '[': ['beforeElement'],
+      'eof': ['afterPath']
+    },
+
+    'beforeIdent': {
+      'ws': ['beforeIdent'],
+      'ident': ['inIdent', 'append']
+    },
+
+    'inIdent': {
+      'ident': ['inIdent', 'append'],
+      '0': ['inIdent', 'append'],
+      'number': ['inIdent', 'append'],
+      'ws': ['inPath', 'push'],
+      '.': ['beforeIdent', 'push'],
+      '[': ['beforeElement', 'push'],
+      'eof': ['afterPath', 'push']
+    },
+
+    'beforeElement': {
+      'ws': ['beforeElement'],
+      '0': ['afterZero', 'append'],
+      'number': ['inIndex', 'append'],
+      "'": ['inSingleQuote', 'append', ''],
+      '"': ['inDoubleQuote', 'append', '']
+    },
+
+    'afterZero': {
+      'ws': ['afterElement', 'push'],
+      ']': ['inPath', 'push']
+    },
+
+    'inIndex': {
+      '0': ['inIndex', 'append'],
+      'number': ['inIndex', 'append'],
+      'ws': ['afterElement'],
+      ']': ['inPath', 'push']
+    },
+
+    'inSingleQuote': {
+      "'": ['afterElement'],
+      'eof': ['error'],
+      'else': ['inSingleQuote', 'append']
+    },
+
+    'inDoubleQuote': {
+      '"': ['afterElement'],
+      'eof': ['error'],
+      'else': ['inDoubleQuote', 'append']
+    },
+
+    'afterElement': {
+      'ws': ['afterElement'],
+      ']': ['inPath', 'push']
+    }
+  }
+
+  function noop() {}
+
+  function parsePath(path) {
+    var keys = [];
+    var index = -1;
+    var c, newChar, key, type, transition, action, typeMap, mode = 'beforePath';
+
+    var actions = {
+      push: function() {
+        if (key === undefined)
+          return;
+
+        keys.push(key);
+        key = undefined;
+      },
+
+      append: function() {
+        if (key === undefined)
+          key = newChar
+        else
+          key += newChar;
+      }
+    };
+
+    function maybeUnescapeQuote() {
+      if (index >= path.length)
+        return;
+
+      var nextChar = path[index + 1];
+      if ((mode == 'inSingleQuote' && nextChar == "'") ||
+          (mode == 'inDoubleQuote' && nextChar == '"')) {
+        index++;
+        newChar = nextChar;
+        actions.append();
+        return true;
+      }
+    }
+
+    while (mode) {
+      index++;
+      c = path[index];
+
+      if (c == '\\' && maybeUnescapeQuote(mode))
+        continue;
+
+      type = getPathCharType(c);
+      typeMap = pathStateMachine[mode];
+      transition = typeMap[type] || typeMap['else'] || 'error';
+
+      if (transition == 'error')
+        return; // parse error;
+
+      mode = transition[0];
+      action = actions[transition[1]] || noop;
+      newChar = transition[2] === undefined ? c : transition[2];
+      action();
+
+      if (mode === 'afterPath') {
+        return keys;
+      }
+    }
+
+    return; // parse error
+  }
+
+  function isIdent(s) {
+    return identRegExp.test(s);
+  }
+
+  var constructorIsPrivate = {};
+
+  function Path(parts, privateToken) {
+    if (privateToken !== constructorIsPrivate)
+      throw Error('Use Path.get to retrieve path objects');
+
+    for (var i = 0; i < parts.length; i++) {
+      this.push(String(parts[i]));
+    }
+
+    if (hasEval && this.length) {
+      this.getValueFrom = this.compiledGetValueFromFn();
+    }
+  }
+
+  // TODO(rafaelw): Make simple LRU cache
+  var pathCache = {};
+
+  function getPath(pathString) {
+    if (pathString instanceof Path)
+      return pathString;
+
+    if (pathString == null || pathString.length == 0)
+      pathString = '';
+
+    if (typeof pathString != 'string') {
+      if (isIndex(pathString.length)) {
+        // Constructed with array-like (pre-parsed) keys
+        return new Path(pathString, constructorIsPrivate);
+      }
+
+      pathString = String(pathString);
+    }
+
+    var path = pathCache[pathString];
+    if (path)
+      return path;
+
+    var parts = parsePath(pathString);
+    if (!parts)
+      return invalidPath;
+
+    var path = new Path(parts, constructorIsPrivate);
+    pathCache[pathString] = path;
+    return path;
+  }
+
+  Path.get = getPath;
+
+  function formatAccessor(key) {
+    if (isIndex(key)) {
+      return '[' + key + ']';
+    } else {
+      return '["' + key.replace(/"/g, '\\"') + '"]';
+    }
+  }
+
+  Path.prototype = createObject({
+    __proto__: [],
+    valid: true,
+
+    toString: function() {
+      var pathString = '';
+      for (var i = 0; i < this.length; i++) {
+        var key = this[i];
+        if (isIdent(key)) {
+          pathString += i ? '.' + key : key;
+        } else {
+          pathString += formatAccessor(key);
+        }
+      }
+
+      return pathString;
+    },
+
+    getValueFrom: function(obj, directObserver) {
+      for (var i = 0; i < this.length; i++) {
+        if (obj == null)
+          return;
+        obj = obj[this[i]];
+      }
+      return obj;
+    },
+
+    iterateObjects: function(obj, observe) {
+      for (var i = 0; i < this.length; i++) {
+        if (i)
+          obj = obj[this[i - 1]];
+        if (!isObject(obj))
+          return;
+        observe(obj, this[i]);
+      }
+    },
+
+    compiledGetValueFromFn: function() {
+      var str = '';
+      var pathString = 'obj';
+      str += 'if (obj != null';
+      var i = 0;
+      var key;
+      for (; i < (this.length - 1); i++) {
+        key = this[i];
+        pathString += isIdent(key) ? '.' + key : formatAccessor(key);
+        str += ' &&\n     ' + pathString + ' != null';
+      }
+      str += ')\n';
+
+      var key = this[i];
+      pathString += isIdent(key) ? '.' + key : formatAccessor(key);
+
+      str += '  return ' + pathString + ';\nelse\n  return undefined;';
+      return new Function('obj', str);
+    },
+
+    setValueFrom: function(obj, value) {
+      if (!this.length)
+        return false;
+
+      for (var i = 0; i < this.length - 1; i++) {
+        if (!isObject(obj))
+          return false;
+        obj = obj[this[i]];
+      }
+
+      if (!isObject(obj))
+        return false;
+
+      obj[this[i]] = value;
+      return true;
+    }
+  });
+
+  var invalidPath = new Path('', constructorIsPrivate);
+  invalidPath.valid = false;
+  invalidPath.getValueFrom = invalidPath.setValueFrom = function() {};
+
+  var MAX_DIRTY_CHECK_CYCLES = 1000;
+
+  function dirtyCheck(observer) {
+    var cycles = 0;
+    while (cycles < MAX_DIRTY_CHECK_CYCLES && observer.check_()) {
+      cycles++;
+    }
+    if (testingExposeCycleCount)
+      global.dirtyCheckCycleCount = cycles;
+
+    return cycles > 0;
+  }
+
+  function objectIsEmpty(object) {
+    for (var prop in object)
+      return false;
+    return true;
+  }
+
+  function diffIsEmpty(diff) {
+    return objectIsEmpty(diff.added) &&
+           objectIsEmpty(diff.removed) &&
+           objectIsEmpty(diff.changed);
+  }
+
+  function diffObjectFromOldObject(object, oldObject) {
+    var added = {};
+    var removed = {};
+    var changed = {};
+
+    for (var prop in oldObject) {
+      var newValue = object[prop];
+
+      if (newValue !== undefined && newValue === oldObject[prop])
+        continue;
+
+      if (!(prop in object)) {
+        removed[prop] = undefined;
+        continue;
+      }
+
+      if (newValue !== oldObject[prop])
+        changed[prop] = newValue;
+    }
+
+    for (var prop in object) {
+      if (prop in oldObject)
+        continue;
+
+      added[prop] = object[prop];
+    }
+
+    if (Array.isArray(object) && object.length !== oldObject.length)
+      changed.length = object.length;
+
+    return {
+      added: added,
+      removed: removed,
+      changed: changed
+    };
+  }
+
+  var eomTasks = [];
+  function runEOMTasks() {
+    if (!eomTasks.length)
+      return false;
+
+    for (var i = 0; i < eomTasks.length; i++) {
+      eomTasks[i]();
+    }
+    eomTasks.length = 0;
+    return true;
+  }
+
+  var runEOM = hasObserve ? (function(){
+    return function(fn) {
+      return Promise.resolve().then(fn);
+    }
+  })() :
+  (function() {
+    return function(fn) {
+      eomTasks.push(fn);
+    };
+  })();
+
+  var observedObjectCache = [];
+
+  function newObservedObject() {
+    var observer;
+    var object;
+    var discardRecords = false;
+    var first = true;
+
+    function callback(records) {
+      if (observer && observer.state_ === OPENED && !discardRecords)
+        observer.check_(records);
+    }
+
+    return {
+      open: function(obs) {
+        if (observer)
+          throw Error('ObservedObject in use');
+
+        if (!first)
+          Object.deliverChangeRecords(callback);
+
+        observer = obs;
+        first = false;
+      },
+      observe: function(obj, arrayObserve) {
+        object = obj;
+        if (arrayObserve)
+          Array.observe(object, callback);
+        else
+          Object.observe(object, callback);
+      },
+      deliver: function(discard) {
+        discardRecords = discard;
+        Object.deliverChangeRecords(callback);
+        discardRecords = false;
+      },
+      close: function() {
+        observer = undefined;
+        Object.unobserve(object, callback);
+        observedObjectCache.push(this);
+      }
+    };
+  }
+
+  /*
+   * The observedSet abstraction is a perf optimization which reduces the total
+   * number of Object.observe observations of a set of objects. The idea is that
+   * groups of Observers will have some object dependencies in common and this
+   * observed set ensures that each object in the transitive closure of
+   * dependencies is only observed once. The observedSet acts as a write barrier
+   * such that whenever any change comes through, all Observers are checked for
+   * changed values.
+   *
+   * Note that this optimization is explicitly moving work from setup-time to
+   * change-time.
+   *
+   * TODO(rafaelw): Implement "garbage collection". In order to move work off
+   * the critical path, when Observers are closed, their observed objects are
+   * not Object.unobserve(d). As a result, it's possible that if the observedSet
+   * is kept open, but some Observers have been closed, it could cause "leaks"
+   * (prevent otherwise collectable objects from being collected). At some
+   * point, we should implement incremental "gc" which keeps a list of
+   * observedSets which may need clean-up and does small amounts of cleanup on a
+   * timeout until all is clean.
+   */
+
+  function getObservedObject(observer, object, arrayObserve) {
+    var dir = observedObjectCache.pop() || newObservedObject();
+    dir.open(observer);
+    dir.observe(object, arrayObserve);
+    return dir;
+  }
+
+  var observedSetCache = [];
+
+  function newObservedSet() {
+    var observerCount = 0;
+    var observers = [];
+    var objects = [];
+    var rootObj;
+    var rootObjProps;
+
+    function observe(obj, prop) {
+      if (!obj)
+        return;
+
+      if (obj === rootObj)
+        rootObjProps[prop] = true;
+
+      if (objects.indexOf(obj) < 0) {
+        objects.push(obj);
+        Object.observe(obj, callback);
+      }
+
+      observe(Object.getPrototypeOf(obj), prop);
+    }
+
+    function allRootObjNonObservedProps(recs) {
+      for (var i = 0; i < recs.length; i++) {
+        var rec = recs[i];
+        if (rec.object !== rootObj ||
+            rootObjProps[rec.name] ||
+            rec.type === 'setPrototype') {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function callback(recs) {
+      if (allRootObjNonObservedProps(recs))
+        return;
+
+      var observer;
+      for (var i = 0; i < observers.length; i++) {
+        observer = observers[i];
+        if (observer.state_ == OPENED) {
+          observer.iterateObjects_(observe);
+        }
+      }
+
+      for (var i = 0; i < observers.length; i++) {
+        observer = observers[i];
+        if (observer.state_ == OPENED) {
+          observer.check_();
+        }
+      }
+    }
+
+    var record = {
+      objects: objects,
+      get rootObject() { return rootObj; },
+      set rootObject(value) {
+        rootObj = value;
+        rootObjProps = {};
+      },
+      open: function(obs, object) {
+        observers.push(obs);
+        observerCount++;
+        obs.iterateObjects_(observe);
+      },
+      close: function(obs) {
+        observerCount--;
+        if (observerCount > 0) {
+          return;
+        }
+
+        for (var i = 0; i < objects.length; i++) {
+          Object.unobserve(objects[i], callback);
+          Observer.unobservedCount++;
+        }
+
+        observers.length = 0;
+        objects.length = 0;
+        rootObj = undefined;
+        rootObjProps = undefined;
+        observedSetCache.push(this);
+        if (lastObservedSet === this)
+          lastObservedSet = null;
+      },
+    };
+
+    return record;
+  }
+
+  var lastObservedSet;
+
+  function getObservedSet(observer, obj) {
+    if (!lastObservedSet || lastObservedSet.rootObject !== obj) {
+      lastObservedSet = observedSetCache.pop() || newObservedSet();
+      lastObservedSet.rootObject = obj;
+    }
+    lastObservedSet.open(observer, obj);
+    return lastObservedSet;
+  }
+
+  var UNOPENED = 0;
+  var OPENED = 1;
+  var CLOSED = 2;
+  var RESETTING = 3;
+
+  var nextObserverId = 1;
+
+  function Observer() {
+    this.state_ = UNOPENED;
+    this.callback_ = undefined;
+    this.target_ = undefined; // TODO(rafaelw): Should be WeakRef
+    this.directObserver_ = undefined;
+    this.value_ = undefined;
+    this.id_ = nextObserverId++;
+  }
+
+  Observer.prototype = {
+    open: function(callback, target) {
+      if (this.state_ != UNOPENED)
+        throw Error('Observer has already been opened.');
+
+      addToAll(this);
+      this.callback_ = callback;
+      this.target_ = target;
+      this.connect_();
+      this.state_ = OPENED;
+      return this.value_;
+    },
+
+    close: function() {
+      if (this.state_ != OPENED)
+        return;
+
+      removeFromAll(this);
+      this.disconnect_();
+      this.value_ = undefined;
+      this.callback_ = undefined;
+      this.target_ = undefined;
+      this.state_ = CLOSED;
+    },
+
+    deliver: function() {
+      if (this.state_ != OPENED)
+        return;
+
+      dirtyCheck(this);
+    },
+
+    report_: function(changes) {
+      try {
+        this.callback_.apply(this.target_, changes);
+      } catch (ex) {
+        Observer._errorThrownDuringCallback = true;
+        console.error('Exception caught during observer callback: ' +
+                       (ex.stack || ex));
+      }
+    },
+
+    discardChanges: function() {
+      this.check_(undefined, true);
+      return this.value_;
+    }
+  }
+
+  var collectObservers = !hasObserve;
+  var allObservers;
+  Observer._allObserversCount = 0;
+
+  if (collectObservers) {
+    allObservers = [];
+  }
+
+  function addToAll(observer) {
+    Observer._allObserversCount++;
+    if (!collectObservers)
+      return;
+
+    allObservers.push(observer);
+  }
+
+  function removeFromAll(observer) {
+    Observer._allObserversCount--;
+  }
+
+  var runningMicrotaskCheckpoint = false;
+
+  global.Platform = global.Platform || {};
+
+  global.Platform.performMicrotaskCheckpoint = function() {
+    if (runningMicrotaskCheckpoint)
+      return;
+
+    if (!collectObservers)
+      return;
+
+    runningMicrotaskCheckpoint = true;
+
+    var cycles = 0;
+    var anyChanged, toCheck;
+
+    do {
+      cycles++;
+      toCheck = allObservers;
+      allObservers = [];
+      anyChanged = false;
+
+      for (var i = 0; i < toCheck.length; i++) {
+        var observer = toCheck[i];
+        if (observer.state_ != OPENED)
+          continue;
+
+        if (observer.check_())
+          anyChanged = true;
+
+        allObservers.push(observer);
+      }
+      if (runEOMTasks())
+        anyChanged = true;
+    } while (cycles < MAX_DIRTY_CHECK_CYCLES && anyChanged);
+
+    if (testingExposeCycleCount)
+      global.dirtyCheckCycleCount = cycles;
+
+    runningMicrotaskCheckpoint = false;
+  };
+
+  if (collectObservers) {
+    global.Platform.clearObservers = function() {
+      allObservers = [];
+    };
+  }
+
+  function ObjectObserver(object) {
+    Observer.call(this);
+    this.value_ = object;
+    this.oldObject_ = undefined;
+  }
+
+  ObjectObserver.prototype = createObject({
+    __proto__: Observer.prototype,
+
+    arrayObserve: false,
+
+    connect_: function(callback, target) {
+      if (hasObserve) {
+        this.directObserver_ = getObservedObject(this, this.value_,
+                                                 this.arrayObserve);
+      } else {
+        this.oldObject_ = this.copyObject(this.value_);
+      }
+
+    },
+
+    copyObject: function(object) {
+      var copy = Array.isArray(object) ? [] : {};
+      for (var prop in object) {
+        copy[prop] = object[prop];
+      };
+      if (Array.isArray(object))
+        copy.length = object.length;
+      return copy;
+    },
+
+    check_: function(changeRecords, skipChanges) {
+      var diff;
+      var oldValues;
+      if (hasObserve) {
+        if (!changeRecords)
+          return false;
+
+        oldValues = {};
+        diff = diffObjectFromChangeRecords(this.value_, changeRecords,
+                                           oldValues);
+      } else {
+        oldValues = this.oldObject_;
+        diff = diffObjectFromOldObject(this.value_, this.oldObject_);
+      }
+
+      if (diffIsEmpty(diff))
+        return false;
+
+      if (!hasObserve)
+        this.oldObject_ = this.copyObject(this.value_);
+
+      this.report_([
+        diff.added || {},
+        diff.removed || {},
+        diff.changed || {},
+        function(property) {
+          return oldValues[property];
+        }
+      ]);
+
+      return true;
+    },
+
+    disconnect_: function() {
+      if (hasObserve) {
+        this.directObserver_.close();
+        this.directObserver_ = undefined;
+      } else {
+        this.oldObject_ = undefined;
+      }
+    },
+
+    deliver: function() {
+      if (this.state_ != OPENED)
+        return;
+
+      if (hasObserve)
+        this.directObserver_.deliver(false);
+      else
+        dirtyCheck(this);
+    },
+
+    discardChanges: function() {
+      if (this.directObserver_)
+        this.directObserver_.deliver(true);
+      else
+        this.oldObject_ = this.copyObject(this.value_);
+
+      return this.value_;
+    }
+  });
+
+  function ArrayObserver(array) {
+    if (!Array.isArray(array))
+      throw Error('Provided object is not an Array');
+    ObjectObserver.call(this, array);
+  }
+
+  ArrayObserver.prototype = createObject({
+
+    __proto__: ObjectObserver.prototype,
+
+    arrayObserve: true,
+
+    copyObject: function(arr) {
+      return arr.slice();
+    },
+
+    check_: function(changeRecords) {
+      var splices;
+      if (hasObserve) {
+        if (!changeRecords)
+          return false;
+        splices = projectArraySplices(this.value_, changeRecords);
+      } else {
+        splices = calcSplices(this.value_, 0, this.value_.length,
+                              this.oldObject_, 0, this.oldObject_.length);
+      }
+
+      if (!splices || !splices.length)
+        return false;
+
+      if (!hasObserve)
+        this.oldObject_ = this.copyObject(this.value_);
+
+      this.report_([splices]);
+      return true;
+    }
+  });
+
+  ArrayObserver.applySplices = function(previous, current, splices) {
+    splices.forEach(function(splice) {
+      var spliceArgs = [splice.index, splice.removed.length];
+      var addIndex = splice.index;
+      while (addIndex < splice.index + splice.addedCount) {
+        spliceArgs.push(current[addIndex]);
+        addIndex++;
+      }
+
+      Array.prototype.splice.apply(previous, spliceArgs);
+    });
+  };
+
+  function PathObserver(object, path) {
+    Observer.call(this);
+
+    this.object_ = object;
+    this.path_ = getPath(path);
+    this.directObserver_ = undefined;
+  }
+
+  PathObserver.prototype = createObject({
+    __proto__: Observer.prototype,
+
+    get path() {
+      return this.path_;
+    },
+
+    connect_: function() {
+      if (hasObserve)
+        this.directObserver_ = getObservedSet(this, this.object_);
+
+      this.check_(undefined, true);
+    },
+
+    disconnect_: function() {
+      this.value_ = undefined;
+
+      if (this.directObserver_) {
+        this.directObserver_.close(this);
+        this.directObserver_ = undefined;
+      }
+    },
+
+    iterateObjects_: function(observe) {
+      this.path_.iterateObjects(this.object_, observe);
+    },
+
+    check_: function(changeRecords, skipChanges) {
+      var oldValue = this.value_;
+      this.value_ = this.path_.getValueFrom(this.object_);
+      if (skipChanges || areSameValue(this.value_, oldValue))
+        return false;
+
+      this.report_([this.value_, oldValue, this]);
+      return true;
+    },
+
+    setValue: function(newValue) {
+      if (this.path_)
+        this.path_.setValueFrom(this.object_, newValue);
+    }
+  });
+
+  function CompoundObserver(reportChangesOnOpen) {
+    Observer.call(this);
+
+    this.reportChangesOnOpen_ = reportChangesOnOpen;
+    this.value_ = [];
+    this.directObserver_ = undefined;
+    this.observed_ = [];
+  }
+
+  var observerSentinel = {};
+
+  CompoundObserver.prototype = createObject({
+    __proto__: Observer.prototype,
+
+    connect_: function() {
+      if (hasObserve) {
+        var object;
+        var needsDirectObserver = false;
+        for (var i = 0; i < this.observed_.length; i += 2) {
+          object = this.observed_[i]
+          if (object !== observerSentinel) {
+            needsDirectObserver = true;
+            break;
+          }
+        }
+
+        if (needsDirectObserver)
+          this.directObserver_ = getObservedSet(this, object);
+      }
+
+      this.check_(undefined, !this.reportChangesOnOpen_);
+    },
+
+    disconnect_: function() {
+      for (var i = 0; i < this.observed_.length; i += 2) {
+        if (this.observed_[i] === observerSentinel)
+          this.observed_[i + 1].close();
+      }
+      this.observed_.length = 0;
+      this.value_.length = 0;
+
+      if (this.directObserver_) {
+        this.directObserver_.close(this);
+        this.directObserver_ = undefined;
+      }
+    },
+
+    addPath: function(object, path) {
+      if (this.state_ != UNOPENED && this.state_ != RESETTING)
+        throw Error('Cannot add paths once started.');
+
+      var path = getPath(path);
+      this.observed_.push(object, path);
+      if (!this.reportChangesOnOpen_)
+        return;
+      var index = this.observed_.length / 2 - 1;
+      this.value_[index] = path.getValueFrom(object);
+    },
+
+    addObserver: function(observer) {
+      if (this.state_ != UNOPENED && this.state_ != RESETTING)
+        throw Error('Cannot add observers once started.');
+
+      this.observed_.push(observerSentinel, observer);
+      if (!this.reportChangesOnOpen_)
+        return;
+      var index = this.observed_.length / 2 - 1;
+      this.value_[index] = observer.open(this.deliver, this);
+    },
+
+    startReset: function() {
+      if (this.state_ != OPENED)
+        throw Error('Can only reset while open');
+
+      this.state_ = RESETTING;
+      this.disconnect_();
+    },
+
+    finishReset: function() {
+      if (this.state_ != RESETTING)
+        throw Error('Can only finishReset after startReset');
+      this.state_ = OPENED;
+      this.connect_();
+
+      return this.value_;
+    },
+
+    iterateObjects_: function(observe) {
+      var object;
+      for (var i = 0; i < this.observed_.length; i += 2) {
+        object = this.observed_[i]
+        if (object !== observerSentinel)
+          this.observed_[i + 1].iterateObjects(object, observe)
+      }
+    },
+
+    check_: function(changeRecords, skipChanges) {
+      var oldValues;
+      for (var i = 0; i < this.observed_.length; i += 2) {
+        var object = this.observed_[i];
+        var path = this.observed_[i+1];
+        var value;
+        if (object === observerSentinel) {
+          var observable = path;
+          value = this.state_ === UNOPENED ?
+              observable.open(this.deliver, this) :
+              observable.discardChanges();
+        } else {
+          value = path.getValueFrom(object);
+        }
+
+        if (skipChanges) {
+          this.value_[i / 2] = value;
+          continue;
+        }
+
+        if (areSameValue(value, this.value_[i / 2]))
+          continue;
+
+        oldValues = oldValues || [];
+        oldValues[i / 2] = this.value_[i / 2];
+        this.value_[i / 2] = value;
+      }
+
+      if (!oldValues)
+        return false;
+
+      // TODO(rafaelw): Having observed_ as the third callback arg here is
+      // pretty lame API. Fix.
+      this.report_([this.value_, oldValues, this.observed_]);
+      return true;
+    }
+  });
+
+  function identFn(value) { return value; }
+
+  function ObserverTransform(observable, getValueFn, setValueFn,
+                             dontPassThroughSet) {
+    this.callback_ = undefined;
+    this.target_ = undefined;
+    this.value_ = undefined;
+    this.observable_ = observable;
+    this.getValueFn_ = getValueFn || identFn;
+    this.setValueFn_ = setValueFn || identFn;
+    // TODO(rafaelw): This is a temporary hack. PolymerExpressions needs this
+    // at the moment because of a bug in it's dependency tracking.
+    this.dontPassThroughSet_ = dontPassThroughSet;
+  }
+
+  ObserverTransform.prototype = {
+    open: function(callback, target) {
+      this.callback_ = callback;
+      this.target_ = target;
+      this.value_ =
+          this.getValueFn_(this.observable_.open(this.observedCallback_, this));
+      return this.value_;
+    },
+
+    observedCallback_: function(value) {
+      value = this.getValueFn_(value);
+      if (areSameValue(value, this.value_))
+        return;
+      var oldValue = this.value_;
+      this.value_ = value;
+      this.callback_.call(this.target_, this.value_, oldValue);
+    },
+
+    discardChanges: function() {
+      this.value_ = this.getValueFn_(this.observable_.discardChanges());
+      return this.value_;
+    },
+
+    deliver: function() {
+      return this.observable_.deliver();
+    },
+
+    setValue: function(value) {
+      value = this.setValueFn_(value);
+      if (!this.dontPassThroughSet_ && this.observable_.setValue)
+        return this.observable_.setValue(value);
+    },
+
+    close: function() {
+      if (this.observable_)
+        this.observable_.close();
+      this.callback_ = undefined;
+      this.target_ = undefined;
+      this.observable_ = undefined;
+      this.value_ = undefined;
+      this.getValueFn_ = undefined;
+      this.setValueFn_ = undefined;
+    }
+  }
+
+  var expectedRecordTypes = {
+    add: true,
+    update: true,
+    delete: true
+  };
+
+  function diffObjectFromChangeRecords(object, changeRecords, oldValues) {
+    var added = {};
+    var removed = {};
+
+    for (var i = 0; i < changeRecords.length; i++) {
+      var record = changeRecords[i];
+      if (!expectedRecordTypes[record.type]) {
+        console.error('Unknown changeRecord type: ' + record.type);
+        console.error(record);
+        continue;
+      }
+
+      if (!(record.name in oldValues))
+        oldValues[record.name] = record.oldValue;
+
+      if (record.type == 'update')
+        continue;
+
+      if (record.type == 'add') {
+        if (record.name in removed)
+          delete removed[record.name];
+        else
+          added[record.name] = true;
+
+        continue;
+      }
+
+      // type = 'delete'
+      if (record.name in added) {
+        delete added[record.name];
+        delete oldValues[record.name];
+      } else {
+        removed[record.name] = true;
+      }
+    }
+
+    for (var prop in added)
+      added[prop] = object[prop];
+
+    for (var prop in removed)
+      removed[prop] = undefined;
+
+    var changed = {};
+    for (var prop in oldValues) {
+      if (prop in added || prop in removed)
+        continue;
+
+      var newValue = object[prop];
+      if (oldValues[prop] !== newValue)
+        changed[prop] = newValue;
+    }
+
+    return {
+      added: added,
+      removed: removed,
+      changed: changed
+    };
+  }
+
+  function newSplice(index, removed, addedCount) {
+    return {
+      index: index,
+      removed: removed,
+      addedCount: addedCount
+    };
+  }
+
+  var EDIT_LEAVE = 0;
+  var EDIT_UPDATE = 1;
+  var EDIT_ADD = 2;
+  var EDIT_DELETE = 3;
+
+  function ArraySplice() {}
+
+  ArraySplice.prototype = {
+
+    // Note: This function is *based* on the computation of the Levenshtein
+    // "edit" distance. The one change is that "updates" are treated as two
+    // edits - not one. With Array splices, an update is really a delete
+    // followed by an add. By retaining this, we optimize for "keeping" the
+    // maximum array items in the original array. For example:
+    //
+    //   'xxxx123' -> '123yyyy'
+    //
+    // With 1-edit updates, the shortest path would be just to update all seven
+    // characters. With 2-edit updates, we delete 4, leave 3, and add 4. This
+    // leaves the substring '123' intact.
+    calcEditDistances: function(current, currentStart, currentEnd,
+                                old, oldStart, oldEnd) {
+      // "Deletion" columns
+      var rowCount = oldEnd - oldStart + 1;
+      var columnCount = currentEnd - currentStart + 1;
+      var distances = new Array(rowCount);
+
+      // "Addition" rows. Initialize null column.
+      for (var i = 0; i < rowCount; i++) {
+        distances[i] = new Array(columnCount);
+        distances[i][0] = i;
+      }
+
+      // Initialize null row
+      for (var j = 0; j < columnCount; j++)
+        distances[0][j] = j;
+
+      for (var i = 1; i < rowCount; i++) {
+        for (var j = 1; j < columnCount; j++) {
+          if (this.equals(current[currentStart + j - 1], old[oldStart + i - 1]))
+            distances[i][j] = distances[i - 1][j - 1];
+          else {
+            var north = distances[i - 1][j] + 1;
+            var west = distances[i][j - 1] + 1;
+            distances[i][j] = north < west ? north : west;
+          }
+        }
+      }
+
+      return distances;
+    },
+
+    // This starts at the final weight, and walks "backward" by finding
+    // the minimum previous weight recursively until the origin of the weight
+    // matrix.
+    spliceOperationsFromEditDistances: function(distances) {
+      var i = distances.length - 1;
+      var j = distances[0].length - 1;
+      var current = distances[i][j];
+      var edits = [];
+      while (i > 0 || j > 0) {
+        if (i == 0) {
+          edits.push(EDIT_ADD);
+          j--;
+          continue;
+        }
+        if (j == 0) {
+          edits.push(EDIT_DELETE);
+          i--;
+          continue;
+        }
+        var northWest = distances[i - 1][j - 1];
+        var west = distances[i - 1][j];
+        var north = distances[i][j - 1];
+
+        var min;
+        if (west < north)
+          min = west < northWest ? west : northWest;
+        else
+          min = north < northWest ? north : northWest;
+
+        if (min == northWest) {
+          if (northWest == current) {
+            edits.push(EDIT_LEAVE);
+          } else {
+            edits.push(EDIT_UPDATE);
+            current = northWest;
+          }
+          i--;
+          j--;
+        } else if (min == west) {
+          edits.push(EDIT_DELETE);
+          i--;
+          current = west;
+        } else {
+          edits.push(EDIT_ADD);
+          j--;
+          current = north;
+        }
+      }
+
+      edits.reverse();
+      return edits;
+    },
+
+    /**
+     * Splice Projection functions:
+     *
+     * A splice map is a representation of how a previous array of items
+     * was transformed into a new array of items. Conceptually it is a list of
+     * tuples of
+     *
+     *   <index, removed, addedCount>
+     *
+     * which are kept in ascending index order of. The tuple represents that at
+     * the |index|, |removed| sequence of items were removed, and counting forward
+     * from |index|, |addedCount| items were added.
+     */
+
+    /**
+     * Lacking individual splice mutation information, the minimal set of
+     * splices can be synthesized given the previous state and final state of an
+     * array. The basic approach is to calculate the edit distance matrix and
+     * choose the shortest path through it.
+     *
+     * Complexity: O(l * p)
+     *   l: The length of the current array
+     *   p: The length of the old array
+     */
+    calcSplices: function(current, currentStart, currentEnd,
+                          old, oldStart, oldEnd) {
+      var prefixCount = 0;
+      var suffixCount = 0;
+
+      var minLength = Math.min(currentEnd - currentStart, oldEnd - oldStart);
+      if (currentStart == 0 && oldStart == 0)
+        prefixCount = this.sharedPrefix(current, old, minLength);
+
+      if (currentEnd == current.length && oldEnd == old.length)
+        suffixCount = this.sharedSuffix(current, old, minLength - prefixCount);
+
+      currentStart += prefixCount;
+      oldStart += prefixCount;
+      currentEnd -= suffixCount;
+      oldEnd -= suffixCount;
+
+      if (currentEnd - currentStart == 0 && oldEnd - oldStart == 0)
+        return [];
+
+      if (currentStart == currentEnd) {
+        var splice = newSplice(currentStart, [], 0);
+        while (oldStart < oldEnd)
+          splice.removed.push(old[oldStart++]);
+
+        return [ splice ];
+      } else if (oldStart == oldEnd)
+        return [ newSplice(currentStart, [], currentEnd - currentStart) ];
+
+      var ops = this.spliceOperationsFromEditDistances(
+          this.calcEditDistances(current, currentStart, currentEnd,
+                                 old, oldStart, oldEnd));
+
+      var splice = undefined;
+      var splices = [];
+      var index = currentStart;
+      var oldIndex = oldStart;
+      for (var i = 0; i < ops.length; i++) {
+        switch(ops[i]) {
+          case EDIT_LEAVE:
+            if (splice) {
+              splices.push(splice);
+              splice = undefined;
+            }
+
+            index++;
+            oldIndex++;
+            break;
+          case EDIT_UPDATE:
+            if (!splice)
+              splice = newSplice(index, [], 0);
+
+            splice.addedCount++;
+            index++;
+
+            splice.removed.push(old[oldIndex]);
+            oldIndex++;
+            break;
+          case EDIT_ADD:
+            if (!splice)
+              splice = newSplice(index, [], 0);
+
+            splice.addedCount++;
+            index++;
+            break;
+          case EDIT_DELETE:
+            if (!splice)
+              splice = newSplice(index, [], 0);
+
+            splice.removed.push(old[oldIndex]);
+            oldIndex++;
+            break;
+        }
+      }
+
+      if (splice) {
+        splices.push(splice);
+      }
+      return splices;
+    },
+
+    sharedPrefix: function(current, old, searchLength) {
+      for (var i = 0; i < searchLength; i++)
+        if (!this.equals(current[i], old[i]))
+          return i;
+      return searchLength;
+    },
+
+    sharedSuffix: function(current, old, searchLength) {
+      var index1 = current.length;
+      var index2 = old.length;
+      var count = 0;
+      while (count < searchLength && this.equals(current[--index1], old[--index2]))
+        count++;
+
+      return count;
+    },
+
+    calculateSplices: function(current, previous) {
+      return this.calcSplices(current, 0, current.length, previous, 0,
+                              previous.length);
+    },
+
+    equals: function(currentValue, previousValue) {
+      return currentValue === previousValue;
+    }
+  };
+
+  var arraySplice = new ArraySplice();
+
+  function calcSplices(current, currentStart, currentEnd,
+                       old, oldStart, oldEnd) {
+    return arraySplice.calcSplices(current, currentStart, currentEnd,
+                                   old, oldStart, oldEnd);
+  }
+
+  function intersect(start1, end1, start2, end2) {
+    // Disjoint
+    if (end1 < start2 || end2 < start1)
+      return -1;
+
+    // Adjacent
+    if (end1 == start2 || end2 == start1)
+      return 0;
+
+    // Non-zero intersect, span1 first
+    if (start1 < start2) {
+      if (end1 < end2)
+        return end1 - start2; // Overlap
+      else
+        return end2 - start2; // Contained
+    } else {
+      // Non-zero intersect, span2 first
+      if (end2 < end1)
+        return end2 - start1; // Overlap
+      else
+        return end1 - start1; // Contained
+    }
+  }
+
+  function mergeSplice(splices, index, removed, addedCount) {
+
+    var splice = newSplice(index, removed, addedCount);
+
+    var inserted = false;
+    var insertionOffset = 0;
+
+    for (var i = 0; i < splices.length; i++) {
+      var current = splices[i];
+      current.index += insertionOffset;
+
+      if (inserted)
+        continue;
+
+      var intersectCount = intersect(splice.index,
+                                     splice.index + splice.removed.length,
+                                     current.index,
+                                     current.index + current.addedCount);
+
+      if (intersectCount >= 0) {
+        // Merge the two splices
+
+        splices.splice(i, 1);
+        i--;
+
+        insertionOffset -= current.addedCount - current.removed.length;
+
+        splice.addedCount += current.addedCount - intersectCount;
+        var deleteCount = splice.removed.length +
+                          current.removed.length - intersectCount;
+
+        if (!splice.addedCount && !deleteCount) {
+          // merged splice is a noop. discard.
+          inserted = true;
+        } else {
+          var removed = current.removed;
+
+          if (splice.index < current.index) {
+            // some prefix of splice.removed is prepended to current.removed.
+            var prepend = splice.removed.slice(0, current.index - splice.index);
+            Array.prototype.push.apply(prepend, removed);
+            removed = prepend;
+          }
+
+          if (splice.index + splice.removed.length > current.index + current.addedCount) {
+            // some suffix of splice.removed is appended to current.removed.
+            var append = splice.removed.slice(current.index + current.addedCount - splice.index);
+            Array.prototype.push.apply(removed, append);
+          }
+
+          splice.removed = removed;
+          if (current.index < splice.index) {
+            splice.index = current.index;
+          }
+        }
+      } else if (splice.index < current.index) {
+        // Insert splice here.
+
+        inserted = true;
+
+        splices.splice(i, 0, splice);
+        i++;
+
+        var offset = splice.addedCount - splice.removed.length
+        current.index += offset;
+        insertionOffset += offset;
+      }
+    }
+
+    if (!inserted)
+      splices.push(splice);
+  }
+
+  function createInitialSplices(array, changeRecords) {
+    var splices = [];
+
+    for (var i = 0; i < changeRecords.length; i++) {
+      var record = changeRecords[i];
+      switch(record.type) {
+        case 'splice':
+          mergeSplice(splices, record.index, record.removed.slice(), record.addedCount);
+          break;
+        case 'add':
+        case 'update':
+        case 'delete':
+          if (!isIndex(record.name))
+            continue;
+          var index = toNumber(record.name);
+          if (index < 0)
+            continue;
+          mergeSplice(splices, index, [record.oldValue], 1);
+          break;
+        default:
+          console.error('Unexpected record type: ' + JSON.stringify(record));
+          break;
+      }
+    }
+
+    return splices;
+  }
+
+  function projectArraySplices(array, changeRecords) {
+    var splices = [];
+
+    createInitialSplices(array, changeRecords).forEach(function(splice) {
+      if (splice.addedCount == 1 && splice.removed.length == 1) {
+        if (splice.removed[0] !== array[splice.index])
+          splices.push(splice);
+
+        return
+      };
+
+      splices = splices.concat(calcSplices(array, splice.index, splice.index + splice.addedCount,
+                                           splice.removed, 0, splice.removed.length));
+    });
+
+    return splices;
+  }
+
+  // Export the observe-js object for **Node.js**, with backwards-compatibility
+  // for the old `require()` API. Also ensure `exports` is not a DOM Element.
+  // If we're in the browser, export as a global object.
+
+  var expose = global;
+
+  if (typeof exports !== 'undefined' && !exports.nodeType) {
+    if (typeof module !== 'undefined' && module.exports) {
+      exports = module.exports;
+    }
+    expose = exports;
+  }
+
+  expose.Observer = Observer;
+  expose.Observer.runEOM_ = runEOM;
+  expose.Observer.observerSentinel_ = observerSentinel; // for testing.
+  expose.Observer.hasObjectObserve = hasObserve;
+  expose.ArrayObserver = ArrayObserver;
+  expose.ArrayObserver.calculateSplices = function(current, previous) {
+    return arraySplice.calculateSplices(current, previous);
+  };
+
+  expose.ArraySplice = ArraySplice;
+  expose.ObjectObserver = ObjectObserver;
+  expose.PathObserver = PathObserver;
+  expose.CompoundObserver = CompoundObserver;
+  expose.Path = Path;
+  expose.ObserverTransform = ObserverTransform;
+  
+})(typeof global !== 'undefined' && global && typeof module !== 'undefined' && module ? global : this || window);
+;(function() {
+    'use strict';
+    var BASE_URL = 'http://api.wap.com:3000/api/v1'
+
+    var wa_tag = document.getElementsByTagName('script')[0]
+    var website_id = wa_tag.getAttribute('id')
+    var COOKIE_KEY_WA_USER_ID  = 'wa_user_id'
+
+    var __WA_DEBUG_ = function(msg){
+        var debug = false
+        if(debug)
+            console.log(msg)
+    }
+
+    var addEvent = function(website_id, category, action, opt_label, opt_value) {
+        __WA_DEBUG_(website_id + ' ->' + category + ' ' + action + ' ' + opt_label  + ' ' + opt_value)
+
+        fetch(BASE_URL + '/website/:website_id/events'.replace(':website_id', website_id), {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    category: category,
+                    action: action,
+                    opt_label: opt_label,
+                    opt_value: opt_value
+
+                })
+            })
+            .then(function(response) {
+                return response.json()
+            })
+            .then(function(json) {
+                if (json.msg) {
+                    console.error(json.msg)
+                }
+            })
+    }
+
+    var observer = new ArrayObserver(_wa);
+    observer.open(function(splices) {
+        console.log(splices)
+        // respond to changes to the elements of arr.
+        splices.forEach(function(splice) {
+            if (splice.addedCount >0){
+                var obj = _wa[splice.index]
+                addEvent(website_id, obj.category, obj.action, obj.opt_label, obj.opt_value)
+            }
+        });
+    });
+    //basicly record
+    (function(website_id){
+        var e = document.createElement('img');
+        e.src = BASE_URL + '/wap.png?wid=' + website_id;
+    })(website_id)
+})()
